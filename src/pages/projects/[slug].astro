@@ -1,0 +1,50 @@
+---
+import EditorialLayout from "../../layouts/EditorialLayout.astro";
+import { type CollectionEntry, getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props as { project: CollectionEntry<"projects"> };
+const { Content } = await project.render();
+
+const githubProfile = project.data.github.trim().replace(/^@/, "");
+---
+
+<EditorialLayout title={`${project.data.title} | Assembling Me`}>
+  <main class="pt-32 pb-16 max-w-4xl mx-auto px-8">
+    <article
+      class="prose prose-invert prose-lg max-w-none [&_p]:my-6 [&_p]:leading-8"
+    >
+      <h1 class="text-4xl md:text-6xl font-black font-headline tracking-tighter text-on-surface">
+        <a
+          class="hover:text-primary transition-colors"
+          href={project.data.projectUrl}
+        >
+          {project.data.title}
+        </a>
+      </h1>
+      <p class="text-sm text-outline">
+        <a
+          href={project.data.latestReleaseUrl}
+          class="mr-4 text-outline font-mono hover:text-on-surface transition-colors"
+        >
+          {project.data.semver}
+        </a>
+        <a
+          class="text-outline hover:text-on-surface transition-colors"
+          href={`https://github.com/${githubProfile}`}
+        >
+          @{githubProfile}
+        </a>
+      </p>
+      <p class="text-on-surface-variant">{project.data.description}</p>
+      <Content />
+    </article>
+  </main>
+</EditorialLayout>

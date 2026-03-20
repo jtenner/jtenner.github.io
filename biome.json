@@ -1,0 +1,15 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.8/schema.json",
+	"files": {
+		"includes": ["**/*.js", "**/*.ts", "**/*.md"],
+		"experimentalScannerIgnores": ["**/node_modules/**", "**/.astro/**"]
+	},
+	"formatter": {
+		"enabled": true
+	},
+	"javascript": {
+		"formatter": {
+			"lineWidth": 100
+		}
+	}
+}

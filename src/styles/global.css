@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { font-family: 'Inter', sans-serif; }
+.font-headline { font-family: 'Space Grotesk', sans-serif; }
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.reading-progress-bar { width: 35%; }
+.asymmetric-layout {
+  display: grid;
+  grid-template-columns: 1fr minmax(auto, 850px) 1fr;
+}
+.hero-gradient {
+  background: linear-gradient(135deg, #7bd0ff 0%, #008abb 100%);
+}
+.text-glow {
+  text-shadow: 0 0 30px rgba(123, 208, 255, 0.3);
+}
+.tonal-shift { transition: background-color 0.3s ease; }
+
+.prose ul,
+.prose ol {
+  list-style-position: outside;
+  padding-left: 1.5rem;
+  margin: 1.25rem 0;
+}
+
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose li {
+  margin: 0.4rem 0;
+}
+
+.prose pre {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.prose pre code {
+  display: block;
+  margin: 0;
+  padding: 0;
+}

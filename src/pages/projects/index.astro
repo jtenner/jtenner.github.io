@@ -1,0 +1,107 @@
+---
+import EditorialLayout from "../../layouts/EditorialLayout.astro";
+import { getCollection } from "astro:content";
+
+const projects = (await getCollection("projects")).sort((a, b) => {
+  const aPriority = a.data.featured ?? -1;
+  const bPriority = b.data.featured ?? -1;
+
+  if (aPriority !== bPriority) {
+    return bPriority - aPriority;
+  }
+
+  return a.slug.localeCompare(b.slug);
+});
+---
+
+<EditorialLayout title="Projects | Assembling Me">
+  <header
+    class="fixed top-0 w-full z-50 bg-[#0b1326]/80 backdrop-blur-xl shadow-2xl shadow-[#060e20]/40 border-b border-white/5"
+  >
+    <div
+      class="flex items-center justify-between px-8 py-4 max-w-screen-2xl mx-auto"
+    >
+      <a
+        class="text-2xl font-black text-primary tracking-tighter font-headline"
+        href="/"
+      >
+        Assembling Me
+      </a>
+      <nav class="flex gap-8">
+        <a
+          class="text-slate-400 hover:text-slate-100 transition-colors font-headline font-bold uppercase tracking-wider text-xs"
+          href="/"
+        >
+          Blog
+        </a>
+        <a
+          class="text-primary border-b-2 border-primary pb-1 font-headline font-bold uppercase tracking-wider text-xs"
+          href="/projects/"
+        >
+          Projects
+        </a>
+        <a
+          class="text-slate-400 hover:text-slate-100 transition-colors font-headline font-bold uppercase tracking-wider text-xs"
+          href="mailto:tenner.joshua@gmail.com"
+        >
+          Contact Me
+        </a>
+      </nav>
+    </div>
+  </header>
+  <main class="pt-32 pb-20 max-w-screen-2xl mx-auto px-8">
+    <header class="mb-10">
+      <p class="text-on-surface-variant text-3xl lg:text-5xl font-light leading-tight">
+        Featured Projects
+      </p>
+    </header>
+
+    <div class="space-y-5">
+      {projects.length === 0 && (
+        <p class="text-outline">
+          No projects yet. Add files in <code class="font-mono">src/content/projects</code>.
+        </p>
+      )}
+
+      {projects.map((project) => (
+        <article class="p-6 rounded-lg border border-outline-variant/20 bg-surface-container-low">
+          <a
+            href={project.data.projectUrl}
+            class="font-headline font-black text-3xl text-on-surface hover:text-primary transition-colors"
+          >
+            {project.data.title}
+          </a>
+
+          <p class="mt-2 text-sm text-outline-variant font-mono">
+            <a
+              href={project.data.latestReleaseUrl}
+              class="hover:text-outline transition-colors"
+            >
+              {project.data.semver}
+            </a>
+          </p>
+
+          <p class="mt-4 text-on-surface-variant leading-relaxed">
+            {project.data.description}
+          </p>
+
+          <p class="mt-4 text-xs text-outline uppercase tracking-widest font-headline">
+            <a
+              href={`https://github.com/${project.data.github.trim().replace(/^@/, "")}`}
+              class="hover:text-on-surface transition-colors"
+            >
+              @{project.data.github.trim().replace(/^@/, "")}
+            </a>
+          </p>
+
+          <a
+            class="mt-4 inline-block text-sm text-primary hover:text-on-primary-container transition-colors"
+            href={`/projects/${project.slug}`}
+          >
+            View project page →
+          </a>
+        </article>
+      ))}
+    </div>
+  </main>
+</EditorialLayout>

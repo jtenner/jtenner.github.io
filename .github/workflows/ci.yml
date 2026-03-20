@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Build
+        run: bun run build
+      - name: Lint (if configured)
+        run: |
+          if node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('package.json','utf8')); process.exit(pkg.scripts && Object.prototype.hasOwnProperty.call(pkg.scripts, 'lint') ? 0 : 1);"; then
+            bun run lint
+          else
+            echo "lint script not defined; skipping"
+          fi
+      - name: Test (if configured)
+        run: |
+          if node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('package.json','utf8')); process.exit(pkg.scripts && Object.prototype.hasOwnProperty.call(pkg.scripts, 'test') ? 0 : 1);"; then
+            bun run test
+          else
+            echo "test script not defined; skipping"
+          fi
+      - name: Typecheck (if configured)
+        run: |
+          if node -e "const fs=require('fs'); const s=(JSON.parse(fs.readFileSync('package.json','utf8')).scripts || {}); process.exit((Object.prototype.hasOwnProperty.call(s, 'check') || Object.prototype.hasOwnProperty.call(s, 'typecheck')) ? 0 : 1);"; then
+            if node -e "const fs=require('fs'); const s=(JSON.parse(fs.readFileSync('package.json','utf8')).scripts || {}); process.exit(Object.prototype.hasOwnProperty.call(s, 'check') ? 0 : 1);"; then
+              bun run check
+            else
+              bun run typecheck
+            fi
+          else
+            echo "check/typecheck script not defined; skipping"
+          fi

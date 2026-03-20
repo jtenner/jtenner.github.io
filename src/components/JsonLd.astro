@@ -1,0 +1,8 @@
+---
+import { toJsonLd, type JsonLdPayload } from "../lib/structuredData";
+
+const { data } = Astro.props as { data: JsonLdPayload };
+const serialized = toJsonLd(data);
+---
+
+<script type="application/ld+json" set:html={serialized} />
