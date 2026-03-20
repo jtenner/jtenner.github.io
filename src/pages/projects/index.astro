@@ -1,6 +1,7 @@
 ---
 import EditorialLayout from "../../layouts/EditorialLayout.astro";
 import { getCollection } from "astro:content";
+import ProjectCard from "../../components/ProjectCard.astro";
 
 const projects = (await getCollection("projects")).sort((a, b) => {
   const aPriority = a.data.featured ?? -1;
@@ -63,45 +64,7 @@ const projects = (await getCollection("projects")).sort((a, b) => {
         </p>
       )}
 
-      {projects.map((project) => (
-        <article class="p-6 rounded-lg border border-outline-variant/20 bg-surface-container-low">
-          <a
-            href={project.data.projectUrl}
-            class="font-headline font-black text-3xl text-on-surface hover:text-primary transition-colors"
-          >
-            {project.data.title}
-          </a>
-
-          <p class="mt-2 text-sm text-outline-variant font-mono">
-            <a
-              href={project.data.latestReleaseUrl}
-              class="hover:text-outline transition-colors"
-            >
-              {project.data.semver}
-            </a>
-          </p>
-
-          <p class="mt-4 text-on-surface-variant leading-relaxed">
-            {project.data.description}
-          </p>
-
-          <p class="mt-4 text-xs text-outline uppercase tracking-widest font-headline">
-            <a
-              href={`https://github.com/${project.data.github.trim().replace(/^@/, "")}`}
-              class="hover:text-on-surface transition-colors"
-            >
-              @{project.data.github.trim().replace(/^@/, "")}
-            </a>
-          </p>
-
-          <a
-            class="mt-4 inline-block text-sm text-primary hover:text-on-primary-container transition-colors"
-            href={`/projects/${project.slug}`}
-          >
-            View project page →
-          </a>
-        </article>
-      ))}
+      {projects.map((project) => <ProjectCard project={project} />)}
     </div>
   </main>
 </EditorialLayout>
