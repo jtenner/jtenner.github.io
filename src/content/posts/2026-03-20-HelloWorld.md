@@ -13,17 +13,17 @@ image: "/images/posts/hello-world-featured.png"
 
 Hi, I’m Joshua Tenner.
 
-I’m a developer who loves building tools, and a lot of my work and curiosity lives around WebAssembly, compilers, validation, optimization, testing infrastructure, and developer tooling.
+I’m a developer who loves building tools, and a lot of my work and curiosity centers on WebAssembly, compilers, validation, optimization, testing infrastructure, and developer tooling.
 
-That usually means I end up digging into representation details, runtime behavior, edge cases, architecture tradeoffs, and all the uncomfortable corners that show up when a project grows. Here I hope to understand how to make developer tools and compete with large projects like Binaryen and other testing frameworks.
+That usually means I end up digging into representation details, runtime behavior, edge cases, architectural tradeoffs, and all the uncomfortable corners that show up when a project grows. This blog is where I work through how to build developer tools that can stand alongside large projects like Binaryen and other mature testing frameworks.
 
-Most of my interests include:
+Some of the areas I keep coming back to include:
 
 - WebAssembly encoders, decoders, validators, and optimizers
 - testing frameworks and fuzzing harnesses
 - compiler and IR design
 - AssemblyScript
-- moonbit
+- MoonBit
 - functional programming
 - TypeScript
 - runtime boundaries between host systems and guest code
