@@ -121,9 +121,9 @@ This involves doing more work up front, as if you were *managing a developer res
 
 Defining your tasks in slices up front really helps the agent know how much work to do before finishing a task. The truth is you will often not need to "go back and revert" your code if you slice your work appropriately. In fact, if you *do* need to revert it back, just ask the agent to change it back and describe *why* it needs to be changed. This will be included in your commit history as a detailed post-mortem of the change. This gives your agent more context in the *diff* itself, almost as if you are logging your mistakes for future you.
 
-Branching? Only do it when you want to explore an "idea" that you're not sure about. 99% of the time, you already know what needs to be done. Your problem has already been scoped and solved in a meaningful way. (Because you're a goood manager, right?)
+Branching? Only do it when you want to explore an "idea" that you're not sure about. 99% of the time, you already know what needs to be done. Your problem has already been scoped and solved in a meaningful way. (Because you're a good manager, right?)
 
-Use your AGENTS.md file to rreat the commit history like a very detailed changelog that the *agent* can use to understand previous context. The changelog you personally care about should be at a much higher level of abstraction in the form of a `CHANGELOG.md` file in the root of your project. Knowing who did what commit and why has more value than the actual summary of the work itself.
+Use your AGENTS.md file to treat the commit history like a very detailed changelog that the *agent* can use to understand previous context. The changelog you personally care about should be at a much higher level of abstraction in the form of a `CHANGELOG.md` file in the root of your project. Knowing who did what commit and why has more value than the actual summary of the work itself.
 
 ## You're a manager now.
 
