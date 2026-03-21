@@ -1,10 +1,10 @@
 ---
 title: "as-harness"
 description: "A modern testing framework for AssemblyScript focused on correctness, WASM-native execution, and improved ergonomics over legacy tools like as-pect."
-semver: "0.1.0"
+semver: "0.2.0"
 github: "https://github.com/jtenner/as-harness"
 projectUrl: "https://github.com/jtenner/as-harness"
-latestReleaseUrl: "https://github.com/jtenner/as-harness/releases"
+latestReleaseUrl: "https://github.com/jtenner/as-harness/releases/tag/v0.2.0"
 featured: 1
 ---
 
