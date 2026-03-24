@@ -9,7 +9,7 @@ categories:
   - "Coding"
   - "Open Source"
   - "Tutorials"
-image: ""
+image: "/images/posts/robot-working-hard.png"
 ---
 
 I have been working on a new AssemblyScript testing framework called `as-harness`.
@@ -55,32 +55,6 @@ npx as-harness run --coverage ./math.test.ts
 You can also switch runtimes later with `--harness js`, `--harness wazero`, or `--harness wasmtime`, but the JS host is the easiest way to get moving.
 
 One nice thing about `as-harness` is that you are not locked into one declaration style. The native `as-harness` API works out of the box, and there are also thin synchronous adapters for things like `node:test`, `uvu`, `jest`, `mocha`, `jasmine`, `tap`, `tape`, `qunit`, `ava`, and `vitest`.
-
-## What `as-harness` does
-
-At a high level, `as-harness` is a WASM-first test runner for AssemblyScript.
-
-Instead of pretending AssemblyScript tests are just JavaScript tests with a thin wrapper, it treats the compiled WebAssembly module as the thing that matters. The guest module declares tests, hooks, dependencies, and hints. The host runtime discovers that structure, plans execution, runs targeted nodes, and reports the results.
-
-That split matters.
-
-The guest owns:
-
-- the test tree
-- discovery
-- execution facts
-- emitted events
-
-The host owns:
-
-- planning
-- scheduling
-- aggregation
-- reporting
-- coverage collection
-- snapshot and fixture I/O
-
-That makes the framework feel much more explicit. It is not just “run some tests and hope the adapter keeps up.” It is a real contract between AssemblyScript code and the runtime that executes it.
 
 ## A basic mental model
 
@@ -135,14 +109,6 @@ That gives you a few important controls:
 - `expectFailure(...)` for tests that are meant to fail
 
 The thin adapters lower their own surface onto that same shared machinery. So a familiar test API can still participate in the same planner, same node graph, and same reporting pipeline.
-
-## Why this feels different from older AssemblyScript testing
-
-What I like about `as-harness` is that the runtime contract is more honest.
-
-It does not try to fake async support that is not really there. It does not hide the fact that discovery and execution are separate phases. It does not treat snapshots or coverage as incidental features bolted on at the end.
-
-The current scope is deliberately synchronous. Promise-based APIs are still out of scope. The adapters are deliberately thin. That sounds restrictive, but I think it is the right tradeoff for a framework that wants to be correct first and broad later.
 
 ## How it works under the hood
 
@@ -303,3 +269,7 @@ But the foundation already feels right to me.
 The important thing is not just that it runs AssemblyScript tests. It is that it gives AssemblyScript a testing model that is actually shaped around WebAssembly, explicit runtime contracts, deterministic planning, and host/guest boundaries that make sense.
 
 That is the part I think is new.
+
+Happy Testing, everyone!
+
+> JT
