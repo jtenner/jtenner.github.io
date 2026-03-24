@@ -1,40 +1,28 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { parseGithubReference } from "../lib/github";
 
 type Props = {
   project: CollectionEntry<"projects">;
 };
 
 const { project } = Astro.props as Props;
-
-const getCreatorName = (githubUrl: string) => {
-  const trimmed = githubUrl.trim();
-  try {
-    const parsed = new URL(trimmed);
-    const parts = parsed.pathname.split("/").filter(Boolean);
-    if (parts.length > 0) {
-      return parts[0];
-    }
-  } catch (_error) {
-    return trimmed.replace(/^@/, "");
-  }
-  return trimmed.replace(/^@/, "");
-};
+const github = parseGithubReference(project.data.github);
 ---
 
 <article class="rounded-lg border border-outline-variant/20 p-5 bg-surface-container-low">
   <div class="flex items-center gap-2 flex-wrap">
     <a
       class="font-headline font-black text-on-surface text-sm uppercase tracking-[0.08em] hover:text-primary transition-colors"
-      href={`/projects/${project.slug}`}
+      href={project.data.projectUrl}
     >
       {project.data.title}
     </a>
     <a
-      href={project.data.github}
+      href={github.ownerUrl ?? project.data.github}
       class="text-xs text-outline uppercase tracking-widest font-headline font-normal hover:text-on-surface transition-colors"
     >
-      {getCreatorName(project.data.github)}
+      {github.owner}
     </a>
   </div>
   <p class="mt-2 text-xs text-outline-variant font-mono">

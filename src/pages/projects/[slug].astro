@@ -1,6 +1,7 @@
 ---
 import EditorialLayout from "../../layouts/EditorialLayout.astro";
 import { type CollectionEntry, getCollection } from "astro:content";
+import { parseGithubReference } from "../../lib/github";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
@@ -12,8 +13,7 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props as { project: CollectionEntry<"projects"> };
 const { Content } = await project.render();
-
-const githubProfile = project.data.github.trim().replace(/^@/, "");
+const github = parseGithubReference(project.data.github);
 ---
 
 <EditorialLayout title={`${project.data.title} | Assembling Me`}>
@@ -38,9 +38,9 @@ const githubProfile = project.data.github.trim().replace(/^@/, "");
         </a>
         <a
           class="text-outline hover:text-on-surface transition-colors"
-          href={`https://github.com/${githubProfile}`}
+          href={github.ownerUrl ?? project.data.github}
         >
-          @{githubProfile}
+          @{github.owner}
         </a>
       </p>
       <p class="text-on-surface-variant">{project.data.description}</p>
