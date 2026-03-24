@@ -18,6 +18,11 @@
 - `.astro/` (Astro internal/config files)
 - `node_modules/` (installed dependencies)
 
+## Build Artifacts
+
+- All generated build artifacts must remain untracked in git when discovered.
+- `dist/`, `.astro/`, and dependency install folders like `node_modules/` are not source files and should be ignored rather than committed.
+
 ## Post Categories
 
 - WASM
