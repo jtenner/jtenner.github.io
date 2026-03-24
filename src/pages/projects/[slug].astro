@@ -16,8 +16,11 @@ const { Content } = await project.render();
 const github = parseGithubReference(project.data.github);
 ---
 
-<EditorialLayout title={`${project.data.title} | Assembling Me`}>
-  <main class="pt-32 pb-16 max-w-4xl mx-auto px-8">
+<EditorialLayout
+  title={`${project.data.title} | Assembling Me`}
+  description={project.data.description}
+>
+  <main class="pt-32 pb-16 max-w-4xl mx-auto px-8" id="main-content">
     <article
       class="prose prose-invert prose-lg max-w-none [&_p]:my-6 [&_p]:leading-8"
     >

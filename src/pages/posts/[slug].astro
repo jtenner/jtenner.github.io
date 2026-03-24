@@ -40,7 +40,13 @@ const published = new Intl.DateTimeFormat("en-US", {
 }).format(post.data.pubDate);
 ---
 
-<EditorialLayout title={`${post.data.title} | Assembling Me`} jsonLd={jsonLd}>
+<EditorialLayout
+  title={`${post.data.title} | Assembling Me`}
+  description={post.data.description}
+  image={post.data.image}
+  jsonLd={jsonLd}
+  openGraphType="article"
+>
   <header
     class="fixed top-0 w-full z-50 bg-[#0b1326]/80 backdrop-blur-xl shadow-2xl shadow-[#060e20]/40 border-b border-white/5"
   >
@@ -53,10 +59,11 @@ const published = new Intl.DateTimeFormat("en-US", {
       >
         Assembling Me
       </a>
-      <nav class="flex gap-8">
+      <nav class="flex gap-8" aria-label="Primary">
         <a
           class="text-primary border-b-2 border-primary pb-1 font-headline font-bold uppercase tracking-wider text-xs"
           href="/"
+          aria-current="page"
         >
           Blog
         </a>
@@ -74,7 +81,7 @@ const published = new Intl.DateTimeFormat("en-US", {
       </nav>
     </div>
   </header>
-  <main class="pt-28 pb-16 max-w-4xl mx-auto px-8">
+  <main class="pt-28 pb-16 max-w-4xl mx-auto px-8" id="main-content">
 	    <article class="prose prose-invert prose-lg max-w-none [&_p]:my-6 [&_p]:leading-8">
       <h1
         class="text-4xl md:text-6xl font-black font-headline tracking-tighter text-on-surface"

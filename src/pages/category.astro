@@ -2,9 +2,14 @@
 import EditorialLayout from "../layouts/EditorialLayout.astro";
 ---
 
-<EditorialLayout title="Cloud Architecture | Assembling Me">
+<EditorialLayout
+  title="Cloud Architecture | Assembling Me"
+  description="A static demo category layout used for design exploration."
+  noindex={true}
+>
   <!-- Top Navigation Bar -->
   <nav
+    aria-label="Primary"
     class="fixed top-0 w-full z-50 bg-[#0b1326]/80 backdrop-blur-xl shadow-2xl shadow-[#060e20]/40"
   >
     <div
@@ -18,7 +23,8 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
       <div class="flex items-center gap-8 font-headline font-bold uppercase tracking-wider">
         <a
           class="text-primary border-b-2 border-primary pb-1 font-headline font-bold uppercase tracking-wider"
-          href="/">Blog</a
+          href="/"
+          aria-current="page">Blog</a
         >
         <a
           class="text-slate-400 hover:text-slate-100 transition-colors"
@@ -33,7 +39,7 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
       </div>
     </div>
   </nav>
-  <main class="pt-32 pb-24">
+  <main class="pt-32 pb-24" id="main-content">
     <!-- Category Header -->
     <header class="max-w-screen-2xl mx-auto px-8 mb-20">
       <div class="flex flex-col md:flex-row gap-12 items-start">
@@ -65,7 +71,7 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
           </div>
           <img
             class="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
-            data-alt="Abstract blue glowing digital server network nodes"
+            alt="Abstract blue glowing digital server network nodes"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3SiJyon1w9IOwzUz8hg_RP8Th72UXE0-611o1VKho3JFQuYehxeCVVtCTRrhTpbgTxbK-SUHlMih9ZrHI3qkwjWvVJCJzrFzKOhwqNnR_wf6DdfAYfZN8ZtEzZz9PGVmN8oTIdIR7CdOL-R5-pbH4RSTFJ5VZtLnRB_eEafdPHkCnEJC-DOhGXT9rHkTNdsUdS3-E46OtmJtaaEm6HEA6G-iHLfXbWuZ2KJ5Tmrjv5hoTFs6bWz50nEIvaJIDftDy8wbH6jdK2Vc"
           />
         </div>
@@ -83,14 +89,8 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
               >Sort By</span
             >
             <div class="flex gap-4">
-              <button
-                class="text-primary font-headline font-bold text-sm tracking-wide"
-                >Newest</button
-              >
-              <button
-                class="text-on-surface-variant hover:text-on-surface transition-colors font-headline font-bold text-sm tracking-wide"
-                >Most Popular</button
-              >
+              <span class="text-primary font-headline font-bold text-sm tracking-wide">Newest</span>
+              <span class="text-on-surface-variant font-headline font-bold text-sm tracking-wide">Most Popular</span>
             </div>
           </div>
           <div class="h-8 w-px bg-outline-variant/20"></div>
@@ -100,18 +100,9 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
               >Complexity</span
             >
             <div class="flex gap-4">
-              <button
-                class="text-on-surface-variant hover:text-on-surface transition-colors font-headline font-bold text-sm tracking-wide"
-                >Entry</button
-              >
-              <button
-                class="text-on-surface-variant hover:text-on-surface transition-colors font-headline font-bold text-sm tracking-wide"
-                >Senior</button
-              >
-              <button
-                class="text-on-surface-variant hover:text-on-surface transition-colors font-headline font-bold text-sm tracking-wide"
-                >Staff+</button
-              >
+              <span class="text-on-surface-variant font-headline font-bold text-sm tracking-wide">Entry</span>
+              <span class="text-on-surface-variant font-headline font-bold text-sm tracking-wide">Senior</span>
+              <span class="text-on-surface-variant font-headline font-bold text-sm tracking-wide">Staff+</span>
             </div>
           </div>
         </div>
@@ -126,13 +117,13 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
     <section class="max-w-screen-2xl mx-auto px-8">
       <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
         <!-- Main Featured Article (Large) -->
-        <article class="md:col-span-8 group cursor-pointer">
+        <article class="md:col-span-8 group">
           <div
             class="relative overflow-hidden mb-6 aspect-[16/9] bg-surface-container"
           >
             <img
               class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
-              data-alt="High tech server room with blue neon lighting"
+              alt="High tech server room with blue neon lighting"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2fmS9D5KMBefbFOpJAXxtAKt7330ronYo8RIKthaYd9YGhtAf7MNdFLPUYYGcUAPdTFRBBQ28kF0Rwfb3viz1OoL1eZpRivf2TKMZOhLkD1CCKtXDRUqdkiOgezDHcOnmkyQuYqRCcQj96hU401_AbToSOc8glTjNlGtMIVFzTx2HcOlpKpd1N-0NE8rKiogc1w26Wtz17oXMIJF4xceuen6zEX5aDXT_YxEfIodyGb8ze45tn1Z4hhA9QrIc7dVJgLdSuyF_mhc"
             />
             <div
@@ -187,13 +178,13 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
         </article>
         <!-- Sidebar Grid Items -->
         <div class="md:col-span-4 flex flex-col gap-12">
-          <article class="group cursor-pointer">
+          <article class="group">
             <div
               class="aspect-video bg-surface-container-high mb-4 overflow-hidden"
             >
               <img
                 class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
-                data-alt="Close up of digital circuit board with light"
+                alt="Close up of digital circuit board with light"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJQkGso9DWKOA-QaeRwC9xCok8lf88sOocHwWtwUBo40FjGAOEpulPNwzVXfAK2w4Y_CiZl4_69C4pWYI-fHph2d3tCF0m6VTQAWUW3Ej8jnzLfLf87KsU2aq4x1VnyA6jj-BCdv3BqAdBmwLdKbgGObXhPBJsJYEIC7Xp2-Ii5MhXQhLeelLiFVqj9jvdX8Ot4ACjHLuSKLJKZ5mVn22-LbluXQu5ByIRhmHL884tvj4Qap3-0eW1DHXbhiikmSYhRCXfR_I_Hq8"
               />
             </div>
@@ -207,13 +198,13 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
               Eventual Consistency in Payment Systems
             </h3>
           </article>
-          <article class="group cursor-pointer">
+          <article class="group">
             <div
               class="aspect-video bg-surface-container-high mb-4 overflow-hidden"
             >
               <img
                 class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
-                data-alt="Digital representation of secure cloud lock"
+                alt="Digital representation of secure cloud lock"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrwXarHMWcG4tmQFzDg5fvVILhLayBT9-Lr-3D-L1x0OI4xSJg2qd0ZDNAOw3v6fxUukhjTJTkJAjg-a-7NZ2rBLfI0jso3wHzX9Z2eAw-ZJAZlsT9z0twHXYXjCCUliBOezMtybs255EjAjMT5LjucWRruXVQQBIOk2bKnBqt7F7IvJxAXc1Dlzlim8vv3k0W3mhMt_k1FLCXYGrh-avEBCWrsA0tH4fGI79z_22tZ0QnX8FspK42nAJHHqN-l8MuzJXwyx_jMe8"
               />
             </div>
@@ -319,33 +310,35 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
     <!-- Pagination -->
     <section class="max-w-screen-2xl mx-auto px-8 mt-24">
       <div class="flex items-center justify-center gap-2">
-        <button
-          class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant/30 text-outline hover:text-primary hover:border-primary transition-all"
+        <span
+          aria-hidden="true"
+          class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant/30 text-outline"
         >
           <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button
+        </span>
+        <span
           class="w-10 h-10 flex items-center justify-center rounded bg-primary text-on-primary font-bold font-headline"
-          >1</button
+          >1</span
         >
-        <button
-          class="w-10 h-10 flex items-center justify-center rounded text-on-surface-variant font-headline font-bold hover:bg-surface-container-high transition-colors"
-          >2</button
+        <span
+          class="w-10 h-10 flex items-center justify-center rounded text-on-surface-variant font-headline font-bold"
+          >2</span
         >
-        <button
-          class="w-10 h-10 flex items-center justify-center rounded text-on-surface-variant font-headline font-bold hover:bg-surface-container-high transition-colors"
-          >3</button
+        <span
+          class="w-10 h-10 flex items-center justify-center rounded text-on-surface-variant font-headline font-bold"
+          >3</span
         >
         <span class="px-2 text-outline">...</span>
-        <button
-          class="w-10 h-10 flex items-center justify-center rounded text-on-surface-variant font-headline font-bold hover:bg-surface-container-high transition-colors"
-          >8</button
+        <span
+          class="w-10 h-10 flex items-center justify-center rounded text-on-surface-variant font-headline font-bold"
+          >8</span
         >
-        <button
-          class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant/30 text-outline hover:text-primary hover:border-primary transition-all"
+        <span
+          aria-hidden="true"
+          class="w-10 h-10 flex items-center justify-center rounded border border-outline-variant/30 text-outline"
         >
           <span class="material-symbols-outlined">chevron_right</span>
-        </button>
+        </span>
       </div>
     </section>
   </main>
@@ -376,15 +369,15 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
           <div class="flex flex-col gap-3 font-inter text-sm">
             <a
               class="text-slate-500 hover:text-[#7bd0ff] hover:translate-x-1 transition-all duration-300"
-              href="#">Changelog</a
+              href="/changelog/">Changelog</a
             >
             <a
               class="text-slate-500 hover:text-[#7bd0ff] hover:translate-x-1 transition-all duration-300"
-              href="#">RSS Feed</a
+              href="/rss.xml">RSS Feed</a
             >
             <a
               class="text-slate-500 hover:text-[#7bd0ff] hover:translate-x-1 transition-all duration-300"
-              href="#">Open Source</a
+              href="/?category=Open+Source">Open Source</a
             >
           </div>
         </div>
@@ -397,15 +390,15 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
           <div class="flex flex-col gap-3 font-inter text-sm">
             <a
               class="text-slate-500 hover:text-[#7bd0ff] hover:translate-x-1 transition-all duration-300"
-              href="#">Privacy Policy</a
+              href="/privacy/">Privacy Policy</a
             >
             <a
               class="text-slate-500 hover:text-[#7bd0ff] hover:translate-x-1 transition-all duration-300"
-              href="#">Terms of Use</a
+              href="/terms/">Terms of Use</a
             >
             <a
               class="text-slate-500 hover:text-[#7bd0ff] hover:translate-x-1 transition-all duration-300"
-              href="#">Cookie Policy</a
+              href="/cookies/">Cookie Policy</a
             >
           </div>
         </div>
@@ -416,17 +409,9 @@ import EditorialLayout from "../layouts/EditorialLayout.astro";
         >
           Newsletter
         </div>
-        <div class="relative">
-          <input
-            class="w-full bg-surface-container-low border-b border-outline-variant/30 px-0 py-3 text-on-surface focus:outline-none focus:border-primary transition-colors text-sm"
-            placeholder="Email address"
-            type="email"
-          />
-          <button
-            class="absolute right-0 top-1/2 -translate-y-1/2 text-primary"
-          >
-            <span class="material-symbols-outlined">arrow_forward</span>
-          </button>
+        <div class="flex flex-col gap-3 text-sm">
+          <a class="text-primary hover:text-[#7bd0ff] transition-colors" href="/rss.xml">Subscribe via RSS</a>
+          <a class="text-primary hover:text-[#7bd0ff] transition-colors" href="mailto:tenner.joshua@gmail.com">Contact Joshua</a>
         </div>
         <p class="text-slate-600 text-[10px] leading-relaxed">
           © 2026 Assembling Me.

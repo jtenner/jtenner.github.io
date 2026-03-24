@@ -62,7 +62,12 @@ const pageLink = (category: string, page: number) => {
 };
 ---
 
-<EditorialLayout title="Assembling Me | The Editorial Architect" jsonLd={jsonLd}>
+<EditorialLayout
+  title="Assembling Me | The Editorial Architect"
+  description="Notes on compilers, WebAssembly, testing infrastructure, and practical systems work."
+  image="/images/hero-home.png"
+  jsonLd={jsonLd}
+>
   <div class="fixed top-0 left-0 w-full h-0.5 bg-primary-container z-[60]">
     <div class="h-full bg-primary w-full"></div>
   </div>
@@ -78,10 +83,11 @@ const pageLink = (category: string, page: number) => {
           class="text-2xl font-black text-primary tracking-tighter font-headline"
           href="/">Assembling Me</a
         >
-        <nav class="flex gap-8">
+        <nav class="flex gap-8" aria-label="Primary">
         <a
           class="text-primary border-b-2 border-primary pb-1 font-headline font-bold uppercase tracking-wider text-xs"
-          href="/">Blog</a
+          href="/"
+          aria-current="page">Blog</a
         >
         <a
           class="text-slate-400 hover:text-slate-100 transition-colors font-headline font-bold uppercase tracking-wider text-xs"
@@ -98,7 +104,7 @@ const pageLink = (category: string, page: number) => {
     </div>
   </header>
 
-  <main class="pt-32 pb-20">
+  <main class="pt-32 pb-20" id="main-content">
     <section class="max-w-screen-xl mx-auto px-6 sm:px-8 mb-24">
       <div
         class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0e1730] px-6 py-8 shadow-[0_30px_80px_rgba(2,8,23,0.45)] sm:px-8 sm:py-10 lg:px-10 lg:py-12"
@@ -231,7 +237,7 @@ const pageLink = (category: string, page: number) => {
               const tag = categories[0] ?? "Systems";
               return (
                 <article
-                  class={`flex flex-col group cursor-pointer ${index >= postsPerPage ? "hidden" : ""}`}
+                  class={`flex flex-col group ${index >= postsPerPage ? "hidden" : ""}`}
                   data-post-card
                   data-categories={JSON.stringify(categories)}
                 >
@@ -618,13 +624,14 @@ const pageLink = (category: string, page: number) => {
           </h4>
           <div class="relative flex items-center">
             <input
+              aria-label="Search posts"
               data-library-search
               class="w-full bg-transparent border-none p-0 focus:ring-0 text-xl font-headline font-medium placeholder:text-outline-variant text-on-surface"
               placeholder="Search topics..."
-              type="text"
+              type="search"
               autocomplete="off"
             />
-            <span class="material-symbols-outlined text-outline">search</span>
+            <span aria-hidden="true" class="material-symbols-outlined text-outline">search</span>
           </div>
         </div>
         <FeaturedProjects />
@@ -653,11 +660,11 @@ const pageLink = (category: string, page: number) => {
         </h5>
         <a
           class="text-slate-500 hover:text-primary font-body text-sm transition-all"
-          href="#">Changelog</a
+          href="/changelog/">Changelog</a
         >
         <a
           class="text-slate-500 hover:text-primary font-body text-sm transition-all"
-          href="#">Privacy Policy</a
+          href="/privacy/">Privacy Policy</a
         >
       </div>
       <div class="md:col-span-4 flex flex-col items-end justify-between">

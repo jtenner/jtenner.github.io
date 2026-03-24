@@ -20,6 +20,11 @@ body { font-family: 'Inter', sans-serif; }
 }
 .tonal-shift { transition: background-color 0.3s ease; }
 
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid #7bd0ff;
+  outline-offset: 3px;
+}
+
 .prose ul,
 .prose ol {
   list-style-position: outside;

@@ -5,20 +5,33 @@ import type { JsonLdPayload } from "../lib/structuredData";
 
 const {
   title = "Assembling Me | The Editorial Architect",
+  description = "Notes on compilers, WebAssembly, testing infrastructure, and practical systems work.",
   bodyClass = "",
   jsonLd,
+  image = "/images/hero-home.png",
+  noindex = false,
+  openGraphType = "website",
 } = Astro.props as {
   title?: string;
+  description?: string;
   bodyClass?: string;
   jsonLd?: JsonLdPayload | JsonLdPayload[];
+  image?: string;
+  noindex?: boolean;
+  openGraphType?: "website" | "article";
 };
 
 const structuredData = (Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [])
   .filter(Boolean)
   .filter((entry): entry is JsonLdPayload => Boolean(entry));
 const baseUrl = Astro.site ?? Astro.url;
+const canonicalUrl = new URL(Astro.url.pathname, baseUrl).toString();
 const rssUrl = new URL("/rss.xml", baseUrl).toString();
 const sitemapUrl = new URL("/sitemap-index.xml", baseUrl).toString();
+const manifestUrl = new URL("/manifest.webmanifest", baseUrl).toString();
+const iconUrl = new URL("/favicon.svg", baseUrl).toString();
+const socialImageUrl = new URL(image, baseUrl).toString();
+const robots = noindex ? "noindex, nofollow" : "index, follow";
 ---
 
 <!doctype html>
@@ -27,6 +40,12 @@ const sitemapUrl = new URL("/sitemap-index.xml", baseUrl).toString();
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>{title}</title>
+    <meta content={description} name="description" />
+    <meta content={robots} name="robots" />
+    <meta content="#0b1326" name="theme-color" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href={iconUrl} sizes="any" type="image/svg+xml" />
+    <link rel="manifest" href={manifestUrl} />
     <link
       rel="alternate"
       type="application/rss+xml"
@@ -34,6 +53,16 @@ const sitemapUrl = new URL("/sitemap-index.xml", baseUrl).toString();
       href={rssUrl}
     />
     <link rel="sitemap" href={sitemapUrl} />
+    <meta content="Assembling Me" property="og:site_name" />
+    <meta content={openGraphType} property="og:type" />
+    <meta content={title} property="og:title" />
+    <meta content={description} property="og:description" />
+    <meta content={canonicalUrl} property="og:url" />
+    <meta content={socialImageUrl} property="og:image" />
+    <meta content="summary_large_image" name="twitter:card" />
+    <meta content={title} name="twitter:title" />
+    <meta content={description} name="twitter:description" />
+    <meta content={socialImageUrl} name="twitter:image" />
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
@@ -47,6 +76,12 @@ const sitemapUrl = new URL("/sitemap-index.xml", baseUrl).toString();
   <body
     class={`bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary antialiased ${bodyClass}`}
   >
+    <a
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-3 focus:text-on-primary"
+      href="#main-content"
+    >
+      Skip to content
+    </a>
     <slot />
   </body>
 </html>
