@@ -36,10 +36,13 @@
 ## New Post Required Frontmatter
 
 - Required metadata:
-  - `title`: string
-  - `description`: string
+  - `title`: non-empty string
+  - `description`: non-empty string
   - `pubDate`: string (`yyyy-mm-dd`, e.g., `2026-03-20`)
-  - `author`: `Joshua Tenner <tenner.joshua@gmail.com>` (or post-specific author, with mailto link)
+  - `author`: non-empty string such as `Joshua Tenner`
+  - `authorEmail`: valid email string such as `tenner.joshua@gmail.com`
   - `categories`: array of category strings (one or more)
   - `image`: url string (leave blank unless provided)
 
+- Feed requirement:
+  - `title`, `description`, and `pubDate` are required for RSS generation and must remain valid on every post.
