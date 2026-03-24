@@ -16,7 +16,9 @@ const {
 const structuredData = (Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [])
   .filter(Boolean)
   .filter((entry): entry is JsonLdPayload => Boolean(entry));
-const rssUrl = new URL("rss.xml", Astro.site ?? Astro.url).toString();
+const baseUrl = Astro.site ?? Astro.url;
+const rssUrl = new URL("/rss.xml", baseUrl).toString();
+const sitemapUrl = new URL("/sitemap-index.xml", baseUrl).toString();
 ---
 
 <!doctype html>
@@ -31,6 +33,7 @@ const rssUrl = new URL("rss.xml", Astro.site ?? Astro.url).toString();
       title="Assembling Me RSS"
       href={rssUrl}
     />
+    <link rel="sitemap" href={sitemapUrl} />
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
