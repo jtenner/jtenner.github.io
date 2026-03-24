@@ -21,7 +21,7 @@ export const parseGithubReference = (input: string): GithubMeta => {
       const [owner = "", repo = ""] = parsed.pathname.split("/").filter(Boolean);
       return buildGithubMeta(owner, repo || null);
     }
-  } catch (_error) {
+  } catch {
     const [owner = "", repo = ""] = trimmed.split("/").filter(Boolean);
     if (owner) {
       return buildGithubMeta(owner, repo || null);
