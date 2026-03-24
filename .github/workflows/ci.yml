@@ -20,6 +20,13 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Build
         run: bun run build
+      - name: Validate RSS (if configured)
+        run: |
+          if node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('package.json','utf8')); process.exit(pkg.scripts && Object.prototype.hasOwnProperty.call(pkg.scripts, 'check:rss') ? 0 : 1);"; then
+            bun run check:rss
+          else
+            echo "check:rss script not defined; skipping"
+          fi
       - name: Lint (if configured)
         run: |
           if node -e "const fs=require('fs'); const pkg=JSON.parse(fs.readFileSync('package.json','utf8')); process.exit(pkg.scripts && Object.prototype.hasOwnProperty.call(pkg.scripts, 'lint') ? 0 : 1);"; then

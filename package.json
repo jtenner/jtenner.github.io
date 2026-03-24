@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev --host 0.0.0.0",
     "build": "astro build",
+    "check:rss": "bun run scripts/check-rss.mjs",
     "preview": "astro preview",
     "format": "biome format . --write && prettier \"src/**/*.astro\" --write",
     "format:check": "biome format . && prettier --check \"src/**/*.astro\""
