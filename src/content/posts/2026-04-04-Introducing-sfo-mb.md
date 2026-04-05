@@ -10,7 +10,7 @@ categories:
   - "Tech"
   - "Tutorials"
   - "Open Source"
-image: "/images/posts/robot-working-hard.png"
+image: "/images/posts/robot-jumping-jack.png"
 ---
 
 If you are new to type systems, this is a practical walkthrough.
