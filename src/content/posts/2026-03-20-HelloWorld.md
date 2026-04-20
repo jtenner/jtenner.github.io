@@ -6,7 +6,7 @@ author: "Joshua Tenner"
 authorEmail: "tenner.joshua@gmail.com"
 categories:
   - "Coding"
-image: "/images/posts/hello-world-featured.png"
+image: ""
 ---
 
 # Hello, world

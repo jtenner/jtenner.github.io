@@ -2,6 +2,11 @@
 import EditorialLayout from "../layouts/EditorialLayout.astro";
 import { getCollection } from "astro:content";
 import FeaturedProjects from "../components/FeaturedProjects.astro";
+import NavHeader from "../components/NavHeader.astro";
+import Footer from "../components/Footer.astro";
+import StarField from "../components/StarField.astro";
+import AuthorBio from "../components/AuthorBio.astro";
+import PostCard from "../components/PostCard.astro";
 import {
   BLOG_IDENTITY,
   buildHomepageItemListSchema,
@@ -15,8 +20,6 @@ const allPosts = (await getCollection("posts")).sort(
 );
 
 const categoryParam = Astro.url.searchParams.get("category") ?? "All";
-const pageParam = Astro.url.searchParams.get("page") ?? "1";
-
 const categoryFilters = [
   "All",
   ...new Set(allPosts.flatMap((post) => post.data.categories).sort()),
@@ -24,16 +27,8 @@ const categoryFilters = [
 const selectedCategory = categoryFilters.includes(categoryParam)
   ? categoryParam
   : "All";
-const currentPage = Math.max(1, Number.parseInt(pageParam, 10) || 1);
-const postsPerPage = 2;
-const totalPosts = allPosts.length;
-const totalPages = Math.max(1, Math.ceil(totalPosts / postsPerPage));
-const safePage = Math.min(currentPage, totalPages);
+
 const site = Astro.site ?? Astro.url;
-const visiblePosts = allPosts.slice(
-  (safePage - 1) * postsPerPage,
-  safePage * postsPerPage,
-);
 const jsonLd = [
   buildWebsiteSchema({
     site,
@@ -42,638 +37,243 @@ const jsonLd = [
   }),
   buildHomepageItemListSchema({
     site,
-    visiblePosts,
+    visiblePosts: allPosts,
   }),
 ].filter((schema): schema is JsonLdPayload => Boolean(schema));
-
-const pageLink = (category: string, page: number) => {
-  const params = new URLSearchParams();
-
-  if (category !== "All") {
-    params.set("category", category);
-  }
-
-  if (page > 1) {
-    params.set("page", String(page));
-  }
-
-  const qs = params.toString();
-  return qs ? `/?${qs}` : "/";
-};
 ---
 
 <EditorialLayout
   title="Assembling Me | The Editorial Architect"
   description="Notes on compilers, WebAssembly, testing infrastructure, and practical systems work."
-  image="/images/hero-home.png"
   jsonLd={jsonLd}
 >
-  <div class="fixed top-0 left-0 w-full h-0.5 bg-primary-container z-[60]">
-    <div class="h-full bg-primary w-full"></div>
-  </div>
+  <NavHeader activePage="blog" />
 
-  <header
-    class="fixed top-0 w-full z-50 bg-[#0b1326]/80 backdrop-blur-xl shadow-2xl shadow-[#060e20]/40 border-b border-white/5"
-  >
-    <div
-      class="flex items-center justify-between px-8 py-4 max-w-screen-2xl mx-auto"
-    >
-      <div class="flex items-center gap-12">
-        <a
-          class="text-2xl font-black text-primary tracking-tighter font-headline"
-          href="/">Assembling Me</a
-        >
-        <nav class="flex gap-8" aria-label="Primary">
-        <a
-          class="text-primary border-b-2 border-primary pb-1 font-headline font-bold uppercase tracking-wider text-xs"
-          href="/"
-          aria-current="page">Blog</a
-        >
-        <a
-          class="text-slate-400 hover:text-slate-100 transition-colors font-headline font-bold uppercase tracking-wider text-xs"
-          href="/projects/"
-          >Projects</a
-        >
-        <a
-          class="text-slate-400 hover:text-slate-100 transition-colors font-headline font-bold uppercase tracking-wider text-xs"
-          href="mailto:tenner.joshua@gmail.com"
-          >Contact Me</a
-        >
-        </nav>
-      </div>
-    </div>
-  </header>
-
-  <main class="pt-32 pb-20" id="main-content">
-    <section class="max-w-screen-xl mx-auto px-6 sm:px-8 mb-24">
+  <main role="main" class="pt-16" id="main-content">
+    <!-- Hero with Starfield -->
+    <section class="relative w-full" style="background: radial-gradient(ellipse at 50% 0%, rgba(123,208,255,0.08) 0%, transparent 60%);">
+      <StarField height="500px" parallax={true} />
       <div
-        class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0e1730] px-6 py-8 shadow-[0_30px_80px_rgba(2,8,23,0.45)] sm:px-8 sm:py-10 lg:px-10 lg:py-12"
+        class="absolute inset-0 flex flex-col items-center justify-center text-center px-6"
+        style="background: linear-gradient(to bottom, transparent 30%, #0b1326 95%);"
       >
-        <div
-          aria-hidden="true"
-          class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(123,208,255,0.18),_transparent_38%),radial-gradient(circle_at_bottom_right,_rgba(0,138,187,0.2),_transparent_32%)]"
+        <h1
+          class="text-5xl sm:text-7xl lg:text-8xl font-black font-headline tracking-tighter text-on-surface leading-[0.9]"
         >
-        </div>
-        <div
-          aria-hidden="true"
-          class="absolute inset-y-0 right-[12%] hidden w-px bg-white/10 lg:block"
+          Assembling Me
+        </h1>
+        <p
+          class="mt-6 max-w-2xl text-base sm:text-lg text-on-surface-variant leading-relaxed"
         >
-        </div>
-
-        <div
-          class="relative grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)] lg:gap-8"
-        >
-          <div class="max-w-2xl">
-            <div class="mb-6 flex items-center gap-4">
-              <span
-                class="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-headline font-bold uppercase tracking-[0.24em] text-primary"
-              >
-                Builder's Notebook
-              </span>
-              <div class="h-px flex-1 bg-white/10"></div>
-            </div>
-
-            <h1
-              class="max-w-xl text-4xl font-black leading-[0.95] tracking-tight text-on-surface sm:text-5xl lg:text-6xl"
-            >
-              Hey. I'm Josh, and I build things.
-            </h1>
-
-            <p
-              class="mt-5 max-w-xl text-base leading-7 text-slate-300 sm:text-lg"
-            >
-              Notes on compilers, WebAssembly, testing infrastructure, and the
-              awkward systems problems that show up when tools start getting
-              real.
-            </p>
-
-            <div
-              class="mt-8 flex flex-wrap items-center gap-3 text-[10px] font-headline font-bold uppercase tracking-[0.22em] text-slate-400"
-            >
-              <span class="rounded-full border border-white/10 px-3 py-2"
-                >WebAssembly</span
-              >
-              <span class="rounded-full border border-white/10 px-3 py-2"
-                >Developer Tools</span
-              >
-              <span class="rounded-full border border-white/10 px-3 py-2"
-                >Testing Systems</span
-              >
-            </div>
-          </div>
-
-          <div class="relative mx-auto w-full max-w-md lg:max-w-none">
-            <div
-              aria-hidden="true"
-              class="absolute -inset-5 rounded-[2rem] bg-primary/10 blur-3xl"
-            >
-            </div>
-            <div
-              class="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface-container-high shadow-2xl shadow-[#07111f]/40"
-            >
-              <div
-                class="absolute inset-0 z-10 bg-gradient-to-tr from-[#071325]/60 via-transparent to-primary/15"
-              >
-              </div>
-              <img
-                alt="Cybersecurity Infrastructure"
-                class="aspect-[4/5] w-full object-cover object-center opacity-95 transition-transform duration-700 lg:aspect-[5/6]"
-                src="/images/hero-home.png"
-              />
-              <div
-                class="absolute inset-x-0 bottom-0 z-20 flex items-center justify-between gap-4 border-t border-white/10 bg-[#09111f]/80 px-5 py-4 backdrop-blur"
-              >
-                <div>
-                  <p
-                    class="text-[10px] font-headline font-bold uppercase tracking-[0.22em] text-primary"
-                  >
-                    Currently writing about
-                  </p>
-                  <p class="mt-1 text-sm text-slate-200">
-                    Tooling, validation, and practical systems work
-                  </p>
-                </div>
-                <span
-                  class="material-symbols-outlined text-primary text-xl"
-                  aria-hidden="true"
-                >
-                  north_east
-                </span>
-              </div>
-            </div>
-          </div>
+          Notes on compilers, WebAssembly, testing infrastructure, and the
+          awkward systems problems that show up when tools start getting real.
+        </p>
+        <div class="mt-8 w-full max-w-sm">
+          <AuthorBio compact={true} />
         </div>
       </div>
     </section>
 
-    <section
-      class="max-w-screen-2xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-16"
-    >
+    <!-- Posts + Sidebar -->
+    <section class="max-w-screen-2xl mx-auto px-8 py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
+      <!-- Posts -->
       <div class="lg:col-span-8">
         <div
-          class="flex items-center justify-between mb-12 py-4 border-y border-outline-variant/15"
-        >
-          <h2
-            class="text-3xl font-black font-headline tracking-tighter uppercase italic"
-          >
-            Latest Thinking
-          </h2>
-          <span
-            class="text-outline text-[10px] font-bold uppercase tracking-widest font-headline"
-            data-posts-count
-            >{Math.min((safePage - 1) * postsPerPage + 1, totalPosts)}-{
-              Math.min(safePage * postsPerPage, totalPosts)
-            } of {totalPosts} Articles</span
-          >
-        </div>
-
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-y-16 gap-x-12"
-          data-post-grid
+          id="post-list"
+          class="space-y-8"
+          data-post-list
+          aria-label="Blog posts"
         >
           {
-            allPosts.map((post, index) => {
-              const categories = post.data.categories ?? [];
-              const tag = categories[0] ?? "Systems";
-              return (
-                <article
-                  class={`flex flex-col group ${index >= postsPerPage ? "hidden" : ""}`}
-                  data-post-card
-                  data-categories={JSON.stringify(categories)}
-                >
-                  <a href={`/posts/${post.slug}`} class="flex flex-col h-full">
-                    <div class="relative aspect-video mb-6 overflow-hidden bg-surface-container-highest">
-                      <img
-                        alt={post.data.title}
-                        class="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                        src={post.data.image}
-                      />
-                      <div class="absolute top-4 right-4 bg-surface/90 backdrop-blur px-2 py-1">
-                        <span class="text-[10px] font-bold text-tertiary uppercase tracking-widest font-headline">
-                          {tag}
-                        </span>
-                      </div>
-                    </div>
-                    <h3 class="text-2xl font-bold font-headline leading-tight mb-4 group-hover:text-primary transition-colors">
-                      {post.data.title}
-                    </h3>
-                    <p class="text-on-surface-variant text-sm leading-relaxed mb-6 font-light">
-                      {post.data.description}
-                    </p>
-	                  <div class="mt-auto flex items-center justify-between pt-4 border-t border-outline-variant/10">
-	                      <div class="flex items-center gap-3">
-                        <a
-                          class="text-on-surface font-bold font-headline text-[10px] uppercase hover:text-primary transition-colors"
-                          href={`mailto:${post.data.authorEmail}`}
-                        >
-                          {post.data.author}
-                        </a>
-                        <span class="text-outline text-[10px] font-label">
-                          {new Intl.DateTimeFormat("en-US", {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          }).format(new Date(post.data.pubDate))}
-                        </span>
-                      </div>
-                      <span class="material-symbols-outlined text-primary text-sm group-hover:translate-x-1 transition-transform">
-                        arrow_forward
-                      </span>
-                    </div>
-                  </a>
-                </article>
-              );
-            })
+            allPosts.map((post, index) => (
+              <div
+                data-post-card
+                data-categories={JSON.stringify(post.data.categories ?? [])}
+                data-title={post.data.title.toLowerCase()}
+                data-description={post.data.description.toLowerCase()}
+                data-author={post.data.author.toLowerCase()}
+              >
+                <PostCard post={post} index={index} />
+              </div>
+            ))
           }
         </div>
 
-        <p class="mt-10 text-sm text-outline hidden" data-no-posts>
-          No posts found for this category.
+        <p class="mt-10 text-sm text-outline hidden" data-no-posts role="status" aria-live="polite">
+          No posts found for the current filters.
         </p>
 
-        <div
-          class="mt-14 flex items-center justify-between"
-          data-pagination-wrap
-        >
-          <a
-            class="text-outline text-[10px] font-headline font-bold uppercase tracking-[0.2em] hover:text-primary transition-colors"
-            data-filter-link
-            data-pagination-prev
-            href={pageLink(selectedCategory, safePage - 1)}
-          >
-            ← Prev
-          </a>
-          <span
-            class="text-outline text-[10px] font-headline font-bold uppercase tracking-[0.2em]"
-            data-page-indicator>Page {safePage} / {totalPages}</span
-          >
-          <a
-            class="text-outline text-[10px] font-headline font-bold uppercase tracking-[0.2em] hover:text-primary transition-colors"
-            data-filter-link
-            data-pagination-next
-            href={pageLink(selectedCategory, safePage + 1)}
-          >
-            Next →
-          </a>
-        </div>
+        <script is:inline>
+          requestAnimationFrame(() => {
+            const postCards = [...document.querySelectorAll("[data-post-card]")];
+            const categoryLinks = [...document.querySelectorAll("[data-category-link]")];
+            const noPostsElement = document.querySelector("[data-no-posts]");
+            const searchInput = document.querySelector("[data-library-search]");
+            const validCategories = new Set(categoryLinks.map((l) => l.dataset.category));
 
-        <div class="mt-6 flex flex-wrap gap-2" data-page-number-group>
-          {
-            Array.from({ length: totalPages }, (_, index) => index + 1).map(
-              (pageNo) => (
-                <a
-                  class={`px-3 py-1.5 text-[10px] font-headline font-black uppercase tracking-[0.2em] border transition-all ${
-                    pageNo === safePage
-                      ? "bg-surface-container-high border-primary text-primary"
-                      : "border-outline-variant/40 text-outline hover:text-on-surface hover:border-outline"
-                  }`}
-                  data-filter-link
-                  href={pageLink(selectedCategory, pageNo)}
-                >
-                  {pageNo}
-                </a>
-              ),
-            )
-          }
-        </div>
+            const render = () => {
+              const params = new URLSearchParams(window.location.search);
+              const requestedCategory = params.get("category") ?? "All";
+              const category = validCategories.has(requestedCategory) ? requestedCategory : "All";
+              const query = (params.get("q") ?? "").trim().toLowerCase();
 
-        <script is:inline type="module">
-          const postsPerPage = 2;
-          const postCards = [...document.querySelectorAll("[data-post-card]")];
-          const categoryLinks = [
-            ...document.querySelectorAll("[data-category-link]"),
-          ];
-          const countElement = document.querySelector("[data-posts-count]");
-          const noPostsElement = document.querySelector("[data-no-posts]");
-          const prevLink = document.querySelector("[data-pagination-prev]");
-          const nextLink = document.querySelector("[data-pagination-next]");
-          const pageIndicator = document.querySelector("[data-page-indicator]");
-          const pageNumbers = document.querySelector(
-            "[data-page-number-group]",
-          );
-          const showingCategoryElement = document.querySelector(
-            "[data-showing-category]",
-          );
-          const searchInput = document.querySelector("[data-library-search]");
-          const validCategories = new Set(
-            categoryLinks.map((link) => link.dataset.category),
-          );
-          const getCategories = (postCard) => {
-            try {
-              return JSON.parse(postCard.dataset.categories || "[]");
-            } catch {
-              return [];
-            }
-          };
-
-          const pageLink = (category, page, query) => {
-            const params = new URLSearchParams();
-            if (category !== "All") {
-              params.set("category", category);
-            }
-            const normalizedQuery = query?.trim();
-            if (normalizedQuery) {
-              params.set("q", normalizedQuery);
-            }
-            if (page > 1) {
-              params.set("page", String(page));
-            }
-            const qs = params.toString();
-            return qs ? `/?${qs}` : "/";
-          };
-
-          const getTitle = (postCard) =>
-            postCard.querySelector("h3")?.textContent ?? "";
-          const getDescription = (postCard) =>
-            postCard.querySelectorAll("p")[0]?.textContent ?? "";
-          const getAuthor = (postCard) =>
-            postCard.querySelectorAll("p")[1]?.textContent ?? "";
-
-          const render = () => {
-            const params = new URLSearchParams(window.location.search);
-            const requestedCategory = params.get("category") ?? "All";
-            const category = validCategories.has(requestedCategory)
-              ? requestedCategory
-              : "All";
-            const normalizedQuery = (params.get("q") ?? "")
-              .trim()
-              .toLowerCase();
-            const currentPage =
-              Number.parseInt(params.get("page") ?? "1", 10) || 1;
-
-            if (searchInput) {
-              if (searchInput.value !== (params.get("q") ?? "")) {
+              if (searchInput && searchInput.value !== (params.get("q") ?? "")) {
                 searchInput.value = params.get("q") ?? "";
               }
-            }
 
-            const filteredCards = postCards.filter((postCard) => {
-              const categoryMatch =
-                category === "All" ||
-                getCategories(postCard).includes(category);
-              if (!categoryMatch) return false;
-              if (!normalizedQuery) return true;
-              const title = getTitle(postCard).toLowerCase();
-              const description = getDescription(postCard).toLowerCase();
-              const author = getAuthor(postCard).toLowerCase();
-              return (
-                title.includes(normalizedQuery) ||
-                description.includes(normalizedQuery) ||
-                author.includes(normalizedQuery)
-              );
-            });
+              let visible = 0;
+              postCards.forEach((card) => {
+                const cats = (() => {
+                  try {
+                    return JSON.parse(card.dataset.categories || "[]");
+                  } catch {
+                    return [];
+                  }
+                })();
+                const catMatch = category === "All" || cats.includes(category);
+                let textMatch = true;
+                if (query) {
+                  const title = card.dataset.title ?? "";
+                  const desc = card.dataset.description ?? "";
+                  const author = card.dataset.author ?? "";
+                  textMatch = title.includes(query) || desc.includes(query) || author.includes(query);
+                }
+                const show = catMatch && textMatch;
+                card.style.display = show ? "" : "none";
+                if (show) visible++;
+              });
 
-            const totalPosts = filteredCards.length;
-            const totalPages = Math.max(
-              1,
-              Math.ceil(totalPosts / postsPerPage),
-            );
-            const safePage = Math.min(Math.max(1, currentPage), totalPages);
-            const start = (safePage - 1) * postsPerPage;
-            const end = safePage * postsPerPage;
-            const url = pageLink(category, safePage, normalizedQuery);
-            const currentUrl = `${window.location.pathname}${window.location.search}`;
-            if (url !== currentUrl) {
-              window.history.replaceState({}, "", url);
-            }
+              if (noPostsElement) noPostsElement.classList.toggle("hidden", visible > 0);
 
-            postCards.forEach((post) => post.classList.add("hidden"));
-            filteredCards.forEach((post, index) => {
-              if (index >= start && index < end) {
-                post.classList.remove("hidden");
-              }
-            });
+              categoryLinks.forEach((link) => {
+                const isActive = link.dataset.category === category;
+                link.classList.toggle("bg-surface-container-high", isActive);
+                link.classList.toggle("border-primary", isActive);
+                link.classList.toggle("text-primary", isActive);
+                link.classList.toggle("text-outline", !isActive);
+                link.setAttribute("aria-pressed", isActive ? "true" : "false");
+                const qs = new URLSearchParams();
+                if (link.dataset.category !== "All") qs.set("category", link.dataset.category);
+                if (query) qs.set("q", query);
+                link.href = qs.toString() ? `/?${qs}` : "/";
+              });
+            };
 
-            if (countElement) {
-              if (totalPosts === 0) {
-                countElement.textContent = "0-0 of 0 Articles";
-              } else {
-                countElement.textContent = `${Math.min(start + 1, totalPosts)}-${Math.min(end, totalPosts)} of ${totalPosts} Articles`;
-              }
-            }
-
-            if (noPostsElement) {
-              noPostsElement.classList.toggle("hidden", totalPosts > 0);
-            }
-
-            if (prevLink) {
-              if (safePage > 1) {
-                prevLink.href = pageLink(
-                  category,
-                  safePage - 1,
-                  normalizedQuery,
-                );
-                prevLink.classList.remove("text-outline/40");
-                prevLink.classList.add("hover:text-primary");
-              } else {
-                prevLink.removeAttribute("href");
-                prevLink.classList.add("text-outline/40");
-                prevLink.classList.remove("hover:text-primary");
-              }
-            }
-
-            if (nextLink) {
-              if (safePage < totalPages) {
-                nextLink.href = pageLink(
-                  category,
-                  safePage + 1,
-                  normalizedQuery,
-                );
-                nextLink.classList.remove("text-outline/40");
-                nextLink.classList.add("hover:text-primary");
-              } else {
-                nextLink.removeAttribute("href");
-                nextLink.classList.add("text-outline/40");
-                nextLink.classList.remove("hover:text-primary");
-              }
-            }
-
-            if (pageIndicator) {
-              pageIndicator.textContent = `Page ${safePage} / ${totalPages}`;
-            }
-
-            if (pageNumbers) {
-              pageNumbers.innerHTML = "";
-              for (let pageNo = 1; pageNo <= totalPages; pageNo += 1) {
-                const anchor = document.createElement("a");
-                anchor.className =
-                  "px-3 py-1.5 text-[10px] font-headline font-black uppercase tracking-[0.2em] border transition-all " +
-                  (pageNo === safePage
-                    ? "bg-surface-container-high border-primary text-primary"
-                    : "border-outline-variant/40 text-outline hover:text-on-surface hover:border-outline");
-                anchor.href = pageLink(category, pageNo, normalizedQuery);
-                anchor.dataset.filterLink = "true";
-                anchor.textContent = String(pageNo);
-                pageNumbers.appendChild(anchor);
-              }
-            }
-
-            categoryLinks.forEach((link) => {
-              link.href = pageLink(
-                link.dataset.category || "All",
-                1,
-                normalizedQuery,
-              );
-              const isActive = link.dataset.category === category;
-              if (isActive) {
-                link.classList.add(
-                  "bg-surface-container-high",
-                  "border-primary",
-                  "text-primary",
-                );
-                link.classList.remove("text-outline");
-              } else {
-                link.classList.remove(
-                  "bg-surface-container-high",
-                  "border-primary",
-                  "text-primary",
-                );
-                link.classList.add("text-outline");
-              }
-            });
-
-            if (showingCategoryElement) {
-              showingCategoryElement.textContent = `Showing: ${category}`;
-            }
-          };
-
-          const updateQuery = () => {
-            const params = new URLSearchParams(window.location.search);
-            const requestedCategory = params.get("category") ?? "All";
-            const category = validCategories.has(requestedCategory)
-              ? requestedCategory
-              : "All";
-            const query = searchInput?.value?.trim() ?? "";
-            const nextUrl = pageLink(category, 1, query);
-            if (
-              nextUrl !== `${window.location.pathname}${window.location.search}`
-            ) {
-              window.history.pushState({}, "", nextUrl);
-            }
-            render();
-          };
-
-          document.addEventListener("click", (event) => {
-            const anchor = event.target.closest(
-              "[data-category-link], [data-filter-link]",
-            );
-            if (!anchor || !anchor.getAttribute("href")) {
-              return;
-            }
-            event.preventDefault();
-            const nextUrl = anchor.getAttribute("href");
-            if (!nextUrl) return;
-            const currentUrl = `${window.location.pathname}${window.location.search}`;
-            if (nextUrl !== currentUrl) {
-              window.history.pushState({}, "", nextUrl);
+            document.addEventListener("click", (e) => {
+              const anchor = e.target.closest("[data-category-link]");
+              if (!anchor || !anchor.getAttribute("href")) return;
+              e.preventDefault();
+              window.history.pushState({}, "", anchor.getAttribute("href"));
               render();
-            }
-          });
-
-          if (searchInput) {
-            searchInput.addEventListener("input", () => {
-              updateQuery();
             });
-          }
 
-          window.addEventListener("popstate", () => render());
-          render();
+            document.addEventListener("keydown", (e) => {
+              const anchor = e.target.closest("[data-category-link]");
+              if (!anchor || e.key !== " ") return;
+              e.preventDefault();
+              anchor.click();
+            });
+
+            if (searchInput) {
+              searchInput.addEventListener("input", () => {
+                const params = new URLSearchParams(window.location.search);
+                const category = params.get("category") ?? "All";
+                const query = searchInput.value.trim();
+                const qs = new URLSearchParams();
+                if (category !== "All") qs.set("category", category);
+                if (query) qs.set("q", query);
+                const url = qs.toString() ? `/?${qs}` : "/";
+                if (url !== `${window.location.pathname}${window.location.search}`) {
+                  window.history.pushState({}, "", url);
+                }
+                render();
+              });
+
+              searchInput.addEventListener("keydown", (e) => {
+                if (e.key !== "Escape") return;
+                if (!searchInput.value) return;
+                e.preventDefault();
+                searchInput.value = "";
+                const params = new URLSearchParams(window.location.search);
+                const category = params.get("category") ?? "All";
+                const qs = new URLSearchParams();
+                if (category !== "All") qs.set("category", category);
+                const url = qs.toString() ? `/?${qs}` : "/";
+                window.history.pushState({}, "", url);
+                render();
+              });
+            }
+
+            window.addEventListener("popstate", render);
+            render();
+          });
         </script>
       </div>
 
+      <!-- Sidebar -->
       <aside class="lg:col-span-4 space-y-16">
-        <section>
+        <section aria-labelledby="category-filters-heading">
           <h4
+            id="category-filters-heading"
             class="text-[10px] font-bold uppercase tracking-widest text-primary font-headline mb-4"
           >
             Categories
           </h4>
-          <div class="flex flex-wrap gap-3">
+          <div class="flex flex-wrap gap-3" aria-label="Filter posts by category">
             {
               categoryFilters.map((category) => (
                 <a
                   data-category-link
                   data-category={category}
+                  role="button"
+                  aria-pressed={category === selectedCategory ? "true" : "false"}
+                  aria-controls="post-list"
                   class={`px-3 py-2 text-[10px] font-headline font-black uppercase tracking-[0.2em] border border-outline-variant/30 transition-all ${
                     category === selectedCategory
                       ? "bg-surface-container-high border-primary text-primary"
                       : "text-outline"
                   }`}
-                  data-filter-link
-                  href={pageLink(category, 1)}
+                  href={category === "All" ? "/" : `/?category=${category}`}
                 >
                   {category}
                 </a>
               ))
             }
           </div>
-          <div
-            class="text-[10px] text-outline tracking-[0.2em] font-headline uppercase mt-3"
-            data-showing-category
-          >
-            Showing: {selectedCategory}
-          </div>
         </section>
+
         <div
           class="p-8 bg-surface-container-low border-b-2 border-transparent focus-within:border-primary transition-all"
         >
           <h4
+            id="search-label"
             class="text-[10px] font-bold uppercase tracking-widest text-outline font-headline mb-4"
           >
-            Library Search
+            Search
           </h4>
           <div class="relative flex items-center">
             <input
-              aria-label="Search posts"
+              aria-labelledby="search-label"
+              aria-controls="post-list"
               data-library-search
               class="w-full bg-transparent border-none p-0 focus:ring-0 text-xl font-headline font-medium placeholder:text-outline-variant text-on-surface"
               placeholder="Search topics..."
               type="search"
               autocomplete="off"
             />
-            <span aria-hidden="true" class="material-symbols-outlined text-outline">search</span>
+            <span
+              aria-hidden="true"
+              class="material-symbols-outlined text-outline"
+            >
+              search
+            </span>
           </div>
         </div>
+
         <FeaturedProjects />
       </aside>
     </section>
   </main>
 
-  <footer class="bg-[#0b1326] w-full border-t border-white/5 mt-16">
-    <div
-      class="grid grid-cols-1 md:grid-cols-12 gap-12 px-8 py-20 max-w-screen-2xl mx-auto"
-    >
-      <div class="md:col-span-4 space-y-6">
-        <span
-          class="font-headline font-black text-primary text-2xl tracking-tighter"
-          >Assembling Me</span
-        >
-        <p class="text-slate-500 font-body text-sm leading-relaxed max-w-xs">
-          A practical blog on WebAssembly tooling, compiler systems, and robust software architecture.
-        </p>
-      </div>
-      <div class="md:col-span-4 flex flex-col gap-4">
-        <h5
-          class="text-primary font-bold font-headline text-[10px] uppercase tracking-widest"
-        >
-          Resources
-        </h5>
-        <a
-          class="text-slate-500 hover:text-primary font-body text-sm transition-all"
-          href="/changelog/">Changelog</a
-        >
-        <a
-          class="text-slate-500 hover:text-primary font-body text-sm transition-all"
-          href="/privacy/">Privacy Policy</a
-        >
-      </div>
-      <div class="md:col-span-4 flex flex-col items-end justify-between">
-        <p
-          class="text-slate-600 font-headline text-[10px] uppercase tracking-widest text-right mt-8"
-        >
-          © 2026 Assembling Me.
-        </p>
-      </div>
-    </div>
-  </footer>
+  <Footer />
 </EditorialLayout>

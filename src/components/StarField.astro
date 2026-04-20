@@ -1,0 +1,219 @@
+---
+interface Props {
+  height?: string;
+  parallax?: boolean;
+}
+
+const { height = "500px", parallax = false } = Astro.props;
+---
+
+<div id="starfield-container" style={`height: ${height}; position: relative; overflow: hidden;`}>
+  <canvas
+    id="starfield-canvas"
+    style="position: absolute; inset: 0; width: 100%; height: 100%;"
+    aria-hidden="true"
+  ></canvas>
+</div>
+
+<script is:inline define:vars={{ parallax }}>
+  (function () {
+    const canvas = document.getElementById("starfield-canvas");
+    if (!canvas) return;
+    const gl = canvas.getContext("webgl2");
+    if (!gl) return;
+
+    const STAR_COUNT = 3000;
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    const vsSource = [
+      "#version 300 es",
+      "in vec2 a_position;",
+      "in float a_size;",
+      "in vec3 a_color;",
+      "in float a_phase;",
+      "in vec2 a_velocity;",
+      "uniform float u_time;",
+      "uniform vec2 u_resolution;",
+      "uniform vec2 u_mouse;",
+      "out vec3 v_color;",
+      "out float v_alpha;",
+      "void main() {",
+      "  float t = u_time;",
+      "  vec2 pos = a_position;",
+      "  pos.y += t * a_velocity.y * 0.02;",
+      "  pos.y = mod(pos.y + 1.0, 2.0) - 1.0;",
+      "  pos.x += sin(t * 0.3 + a_phase * 10.0) * a_velocity.x * 0.005;",
+      "  vec2 mouseClip = vec2(u_mouse.x * 2.0 - 1.0, u_mouse.y * 2.0 - 1.0);",
+      "  if (" + (parallax ? "true" : "false") + ") {",
+      "    vec2 mouseOffset = (u_mouse - 0.5) * 0.05;",
+      "    pos.x += mouseOffset.x * a_size;",
+      "    pos.y += mouseOffset.y * a_size;",
+      "  }",
+      "  float proximity = 1.0 - smoothstep(0.0, 0.28, distance(pos, mouseClip));",
+      "  gl_Position = vec4(pos, 0.0, 1.0);",
+      "  gl_PointSize = a_size * (1.0 + 0.15 * u_resolution.y / 800.0);",
+      "  vec3 highlightColor = mix(a_color, vec3(1.0), proximity * 0.85);",
+      "  v_color = highlightColor;",
+      "  float twinkle = 0.5 + 0.5 * sin(t * (1.5 + a_phase * 2.0) + a_phase * 6.2832);",
+      "  v_alpha = min(1.0, 0.3 + 0.7 * twinkle + proximity * 0.35);",
+      "}"
+    ].join("\n");
+
+    const fsSource = [
+      "#version 300 es",
+      "precision mediump float;",
+      "in vec3 v_color;",
+      "in float v_alpha;",
+      "out vec4 fragColor;",
+      "void main() {",
+      "  vec2 center = gl_PointCoord - 0.5;",
+      "  float dist = length(center);",
+      "  if (dist > 0.5) discard;",
+      "  float glow = 1.0 - smoothstep(0.0, 0.5, dist);",
+      "  fragColor = vec4(v_color, v_alpha * glow);",
+      "}"
+    ].join("\n");
+
+    function compileShader(type, source) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.error("StarField shader compile failed:", gl.getShaderInfoLog(shader), source);
+        gl.deleteShader(shader);
+        return null;
+      }
+      return shader;
+    }
+
+    const vs = compileShader(gl.VERTEX_SHADER, vsSource);
+    const fs = compileShader(gl.FRAGMENT_SHADER, fsSource);
+    if (!vs || !fs) return;
+
+    const program = gl.createProgram();
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error("StarField program link failed:", gl.getProgramInfoLog(program));
+      return;
+    }
+
+    gl.useProgram(program);
+
+    const STAR_FLOATS = 9;
+    const data = new Float32Array(STAR_COUNT * STAR_FLOATS);
+
+    const colorPool = [
+      [1.0, 1.0, 1.0],
+      [1.0, 1.0, 1.0],
+      [0.482, 0.816, 1.0],
+      [0.58, 0.82, 1.0],
+      [0.77, 0.91, 1.0],
+      [1.0, 0.85, 0.91],
+      [1.0, 0.706, 0.671]
+    ];
+
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const off = i * STAR_FLOATS;
+      data[off + 0] = Math.random() * 2.0 - 1.0;
+      data[off + 1] = Math.random() * 2.0 - 1.0;
+      data[off + 2] = 1.0 + Math.random() * 2.0;
+      const c = colorPool[Math.floor(Math.random() * colorPool.length)];
+      data[off + 3] = c[0];
+      data[off + 4] = c[1];
+      data[off + 5] = c[2];
+      data[off + 6] = Math.random();
+      data[off + 7] = (Math.random() - 0.5) * 2.0;
+      data[off + 8] = 0.3 + Math.random() * 1.5;
+    }
+
+    const vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+
+    const vbo = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+    gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+
+    const stride = STAR_FLOATS * 4;
+
+    const a_position = gl.getAttribLocation(program, "a_position");
+    gl.enableVertexAttribArray(a_position);
+    gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, stride, 0);
+
+    const a_size = gl.getAttribLocation(program, "a_size");
+    gl.enableVertexAttribArray(a_size);
+    gl.vertexAttribPointer(a_size, 1, gl.FLOAT, false, stride, 8);
+
+    const a_color = gl.getAttribLocation(program, "a_color");
+    gl.enableVertexAttribArray(a_color);
+    gl.vertexAttribPointer(a_color, 3, gl.FLOAT, false, stride, 12);
+
+    const a_phase = gl.getAttribLocation(program, "a_phase");
+    gl.enableVertexAttribArray(a_phase);
+    gl.vertexAttribPointer(a_phase, 1, gl.FLOAT, false, stride, 24);
+
+    const a_velocity = gl.getAttribLocation(program, "a_velocity");
+    gl.enableVertexAttribArray(a_velocity);
+    gl.vertexAttribPointer(a_velocity, 2, gl.FLOAT, false, stride, 28);
+
+    gl.bindVertexArray(null);
+
+    const u_time = gl.getUniformLocation(program, "u_time");
+    const u_resolution = gl.getUniformLocation(program, "u_resolution");
+    const u_mouse = gl.getUniformLocation(program, "u_mouse");
+
+    gl.clearColor(0, 0, 0, 0);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    let mouseX = 0.5, mouseY = 0.5;
+
+    if (parallax) {
+      document.addEventListener("mousemove", function(e) {
+        const rect = canvas.getBoundingClientRect();
+        const localX = (e.clientX - rect.left) / rect.width;
+        const localY = 1.0 - ((e.clientY - rect.top) / rect.height);
+        mouseX = Math.max(0.0, Math.min(1.0, localX));
+        mouseY = Math.max(0.0, Math.min(1.0, localY));
+      });
+
+      document.addEventListener("mouseleave", function() {
+        mouseX = 0.5;
+        mouseY = 0.5;
+      });
+    }
+
+    let running = true;
+    const startTime = performance.now();
+
+    function frame() {
+      if (!running) return;
+      const t = (performance.now() - startTime) / 1000.0;
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.useProgram(program);
+      gl.uniform1f(u_time, t);
+      gl.uniform2f(u_resolution, canvas.width, canvas.height);
+      gl.uniform2f(u_mouse, mouseX, mouseY);
+      gl.bindVertexArray(vao);
+      gl.drawArrays(gl.POINTS, 0, STAR_COUNT);
+      gl.bindVertexArray(null);
+      requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
+
+    document.addEventListener("astro:before-swap", function() {
+      running = false;
+    }, { once: true });
+  })();
+</script>

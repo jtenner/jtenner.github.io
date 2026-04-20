@@ -1,6 +1,8 @@
 ---
 import EditorialLayout from "../../layouts/EditorialLayout.astro";
 import { type CollectionEntry, getCollection } from "astro:content";
+import NavHeader from "../../components/NavHeader.astro";
+import Footer from "../../components/Footer.astro";
 import { parseGithubReference } from "../../lib/github";
 
 export async function getStaticPaths() {
@@ -20,7 +22,9 @@ const github = parseGithubReference(project.data.github);
   title={`${project.data.title} | Assembling Me`}
   description={project.data.description}
 >
-  <main class="pt-32 pb-16 max-w-4xl mx-auto px-8" id="main-content">
+  <NavHeader activePage="projects" />
+
+  <main class="pt-28 pb-16 max-w-4xl mx-auto px-8" id="main-content">
     <article
       class="prose prose-invert prose-lg max-w-none [&_p]:my-6 [&_p]:leading-8"
     >
@@ -50,4 +54,6 @@ const github = parseGithubReference(project.data.github);
       <Content />
     </article>
   </main>
+
+  <Footer />
 </EditorialLayout>

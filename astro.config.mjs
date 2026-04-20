@@ -8,11 +8,7 @@ export default defineConfig({
     allowedHosts: ["notwindows"]
   },
   integrations: [
-    sitemap({
-      filter: (page) =>
-        page !== 'https://jtenner.github.io/article/' &&
-        page !== 'https://jtenner.github.io/category/'
-    }),
+    sitemap(),
     tailwind()
   ],
   site: 'https://jtenner.github.io'

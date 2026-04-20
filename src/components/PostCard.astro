@@ -1,0 +1,87 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"posts">;
+  index?: number;
+}
+
+const { post } = Astro.props as Props;
+
+const categories = post.data.categories ?? [];
+const tag = categories[0] ?? "Coding";
+
+const CATEGORY_COLORS: Record<string, string> = {
+  WASM: "#008abb",
+  Coding: "#7bd0ff",
+  AI: "#ffafd3",
+  "Open Source": "#b9c8de",
+  Tutorials: "#c4e7ff",
+  Tech: "#909097",
+  Productivity: "#ffd8e7",
+  Web: "#7bd0ff",
+  DevOps: "#45464d",
+  Security: "#ffb4ab",
+  Music: "#cf5497",
+  "Social Media": "#a7b6cc",
+};
+
+const color = CATEGORY_COLORS[tag] ?? "#7bd0ff";
+const cardId = `post-card-${post.slug.replace(/[^a-z0-9-]/gi, "-")}`;
+const titleId = `${cardId}-title`;
+const descriptionId = `${cardId}-description`;
+const metaId = `${cardId}-meta`;
+const published = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+}).format(new Date(post.data.pubDate));
+---
+
+<a
+  href={`/posts/${post.slug}`}
+  aria-labelledby={titleId}
+  aria-describedby={`${descriptionId} ${metaId}`}
+  class="group block bg-surface-container-low border border-outline-variant/15 hover:border-primary/30 transition-all duration-300 p-8 md:p-10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5"
+>
+  <div class="flex flex-col h-full">
+    <span
+      class="inline-block self-start px-3 py-1 text-[10px] font-headline font-black uppercase tracking-[0.2em] text-on-surface mb-5"
+      style={`background: linear-gradient(135deg, ${color}22, ${color}44); border: 1px solid ${color}33;`}
+    >
+      {tag}
+    </span>
+
+    <h3
+      id={titleId}
+      class="text-2xl md:text-3xl font-black font-headline tracking-tight text-on-surface leading-tight mb-4 group-hover:text-primary transition-colors"
+    >
+      {post.data.title}
+    </h3>
+
+    <p id={descriptionId} class="text-on-surface-variant text-sm leading-relaxed mb-8 flex-1 font-light">
+      {post.data.description}
+    </p>
+
+    <div
+      id={metaId}
+      class="flex items-center justify-between pt-5 border-t border-outline-variant/10"
+    >
+      <div class="flex items-center gap-3">
+        <span
+          class="text-on-surface font-bold font-headline text-[10px] uppercase tracking-wider"
+        >
+          {post.data.author}
+        </span>
+        <time class="text-outline text-[10px] font-label tracking-wider" datetime={String(post.data.pubDate)}>
+          {published}
+        </time>
+      </div>
+      <span
+        class="material-symbols-outlined text-primary text-sm group-hover:translate-x-1 transition-transform"
+      >
+        arrow_forward
+      </span>
+    </div>
+  </div>
+</a>

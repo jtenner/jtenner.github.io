@@ -8,19 +8,25 @@ type Props = {
 
 const { project } = Astro.props as Props;
 const github = parseGithubReference(project.data.github);
+const cardId = `project-${project.slug.replace(/[^a-z0-9-]/gi, "-")}`;
+const titleId = `${cardId}-title`;
+const descriptionId = `${cardId}-description`;
 ---
 
-<article class="rounded-lg border border-outline-variant/20 p-5 bg-surface-container-low">
+<article aria-labelledby={titleId} aria-describedby={descriptionId} class="rounded-lg border border-outline-variant/20 p-5 bg-surface-container-low">
   <div class="flex items-center gap-2 flex-wrap">
     <a
+      id={titleId}
       class="font-headline font-black text-on-surface text-sm uppercase tracking-[0.08em] hover:text-primary transition-colors"
       href={project.data.projectUrl}
+      aria-label={`${project.data.title} project website`}
     >
       {project.data.title}
     </a>
     <a
       href={github.ownerUrl ?? project.data.github}
       class="text-xs text-outline uppercase tracking-widest font-headline font-normal hover:text-on-surface transition-colors"
+      aria-label={`${github.owner} GitHub profile`}
     >
       {github.owner}
     </a>
@@ -29,16 +35,18 @@ const github = parseGithubReference(project.data.github);
     <a
       href={project.data.latestReleaseUrl}
       class="hover:text-outline transition-colors"
+      aria-label={`${project.data.title} latest release ${project.data.semver}`}
     >
       {project.data.semver}
     </a>
   </p>
-  <p class="mt-2 text-sm text-outline leading-relaxed">
+  <p id={descriptionId} class="mt-2 text-sm text-outline leading-relaxed">
     {project.data.description}
   </p>
   <a
     href={`/projects/${project.slug}`}
     class="mt-3 inline-block text-xs text-outline transition-colors"
+    aria-label={`View details for ${project.data.title}`}
   >
     View details →
   </a>

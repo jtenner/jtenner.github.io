@@ -1,0 +1,58 @@
+---
+type ActivePage = "blog" | "projects" | "article";
+
+const { activePage = "blog" }: { activePage?: ActivePage } = Astro.props;
+
+const links: { href: string; label: string; page: ActivePage | null; external?: boolean; icon?: string }[] = [
+  { href: "/", label: "Blog", page: "blog" },
+  { href: "/projects/", label: "Projects", page: "projects" },
+  { href: "https://www.linkedin.com/in/joshua-tenner-68316167/", label: "LinkedIn", page: null, external: true, icon: "link" },
+  { href: "https://github.com/jtenner/", label: "GitHub", page: null, external: true, icon: "terminal" },
+  { href: "mailto:tenner.joshua@gmail.com", label: "Contact Me", page: null },
+];
+---
+
+<header
+  role="banner"
+  class="fixed top-0 w-full z-50 bg-[#0b1326]/80 backdrop-blur-xl shadow-2xl shadow-[#060e20]/40 border-b border-white/5"
+>
+  <div class="flex items-center justify-between px-8 py-4 max-w-screen-2xl mx-auto">
+    <a
+      class="text-2xl font-black text-primary tracking-tighter font-headline"
+      href="/"
+      aria-label="Assembling Me home"
+    >
+      Assembling Me
+    </a>
+    <nav role="navigation" class="flex items-center gap-8" aria-label="Primary">
+      {
+        links.map((link) => {
+          const isActive = link.page === activePage;
+          return (
+            <a
+              class:list={[
+                "font-headline font-bold uppercase tracking-wider text-xs transition-colors flex items-center gap-1.5",
+                isActive
+                  ? "text-primary border-b-2 border-primary pb-1"
+                  : "text-slate-400 hover:text-slate-100",
+              ]}
+              href={link.href}
+              aria-current={isActive ? "page" : undefined}
+              aria-label={link.external ? `${link.label} external link` : undefined}
+            >
+              {link.icon && (
+                <span
+                  class="material-symbols-outlined text-sm"
+                  aria-hidden="true"
+                >
+                  {link.icon}
+                </span>
+              )}
+              {link.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+  </div>
+</header>

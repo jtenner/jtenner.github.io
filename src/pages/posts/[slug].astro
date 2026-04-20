@@ -1,6 +1,10 @@
 ---
 import EditorialLayout from "../../layouts/EditorialLayout.astro";
 import { type CollectionEntry, getCollection } from "astro:content";
+import NavHeader from "../../components/NavHeader.astro";
+import Footer from "../../components/Footer.astro";
+import AuthorBio from "../../components/AuthorBio.astro";
+import PostCard from "../../components/PostCard.astro";
 import {
   BLOG_IDENTITY,
   buildBlogPostingSchema,
@@ -33,73 +37,192 @@ const jsonLd = [
   }),
 ].filter((schema): schema is JsonLdPayload => Boolean(schema));
 
+const articleTitleId = `article-title-${post.slug.replace(/[^a-z0-9-]/gi, "-")}`;
+const articleMetaId = `article-meta-${post.slug.replace(/[^a-z0-9-]/gi, "-")}`;
+const relatedHeadingId = `related-posts-${post.slug.replace(/[^a-z0-9-]/gi, "-")}`;
 const published = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
   year: "numeric",
 }).format(post.data.pubDate);
+
+const allPosts = (await getCollection("posts")).sort(
+  (a, b) =>
+    new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf(),
+);
+const relatedPosts = allPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
+
+const categories = post.data.categories ?? [];
 ---
 
 <EditorialLayout
   title={`${post.data.title} | Assembling Me`}
   description={post.data.description}
-  image={post.data.image}
   jsonLd={jsonLd}
   openGraphType="article"
 >
-  <header
-    class="fixed top-0 w-full z-50 bg-[#0b1326]/80 backdrop-blur-xl shadow-2xl shadow-[#060e20]/40 border-b border-white/5"
+  <!-- Reading progress bar -->
+  <div
+    class="fixed top-0 left-0 w-full h-[2px] bg-primary-container z-[60]"
+    id="reading-progress-container"
+    role="progressbar"
+    aria-label="Reading progress"
+    aria-valuenow="0"
+    aria-valuemin="0"
+    aria-valuemax="100"
   >
     <div
-      class="flex items-center justify-between px-8 py-4 max-w-screen-2xl mx-auto"
-    >
-      <a
-        class="text-2xl font-black text-[#7bd0ff] tracking-tighter font-headline"
-        href="/"
-      >
-        Assembling Me
-      </a>
-      <nav class="flex gap-8" aria-label="Primary">
-        <a
-          class="text-primary border-b-2 border-primary pb-1 font-headline font-bold uppercase tracking-wider text-xs"
-          href="/"
-          aria-current="page"
-        >
-          Blog
-        </a>
-        <a
-          class="text-slate-400 hover:text-slate-100 transition-colors font-headline font-bold uppercase tracking-wider text-xs"
-          href="/projects/"
-          >Projects</a
-        >
-        <a
-          class="text-slate-400 hover:text-slate-100 transition-colors font-headline font-bold uppercase tracking-wider text-xs"
-          href="mailto:tenner.joshua@gmail.com"
-        >
-          Contact Me
-        </a>
-      </nav>
+      class="h-full bg-primary transition-[width] duration-75 ease-linear"
+      id="reading-progress-bar"
+      style="width: 0%"
+    ></div>
+  </div>
+
+  <NavHeader activePage="article" />
+
+  <main role="main" class="pt-28 pb-20" id="main-content">
+    <div class="max-w-screen-2xl mx-auto px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+        <!-- Main content area -->
+        <div class="lg:col-span-9">
+          <!-- Post header -->
+          <header class="mb-16 max-w-3xl">
+            <div class="flex items-center gap-3 mb-6" aria-label="Categories">
+              {categories.map((cat) => (
+                <span
+                  class="px-3 py-1 text-[10px] font-headline font-black uppercase tracking-[0.2em] text-on-surface bg-surface-container-low border border-outline-variant/15"
+                >
+                  {cat}
+                </span>
+              ))}
+            </div>
+
+            <h1
+              id={articleTitleId}
+              class="text-4xl md:text-6xl lg:text-7xl font-black font-headline tracking-tighter text-on-surface leading-[0.9] mb-8"
+            >
+              {post.data.title}
+            </h1>
+
+            <div
+              id={articleMetaId}
+              class="flex items-center gap-4 text-sm text-outline font-headline tracking-wider"
+            >
+              <a
+                class="hover:text-primary transition-colors font-bold"
+                href={`mailto:${post.data.authorEmail}`}
+              >
+                {post.data.author}
+              </a>
+              <span class="text-outline-variant">•</span>
+              <time datetime={String(post.data.pubDate)}>{published}</time>
+            </div>
+          </header>
+
+          <!-- Article content -->
+          <article
+            aria-labelledby={articleTitleId}
+            aria-describedby={articleMetaId}
+            class="prose prose-invert prose-lg max-w-3xl [&_p]:my-6 [&_p]:leading-8"
+          >
+            <Content />
+          </article>
+
+          <!-- Author bio -->
+          <div class="mt-20 max-w-3xl">
+            <AuthorBio />
+          </div>
+
+          <!-- Related posts -->
+          {relatedPosts.length > 0 && (
+            <section aria-labelledby={relatedHeadingId} class="mt-24 max-w-full">
+              <h2
+                id={relatedHeadingId}
+                class="text-3xl font-black font-headline tracking-tighter text-on-surface mb-10"
+              >
+                Continue Reading
+              </h2>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {relatedPosts.map((rp, i) => <PostCard post={rp} index={i} />)}
+              </div>
+            </section>
+          )}
+        </div>
+
+        <!-- Right sidebar: Table of Contents -->
+        <aside class="hidden lg:block lg:col-span-3">
+          <div class="sticky top-40">
+            <p
+              class="text-[10px] font-black uppercase tracking-[0.25em] text-primary mb-8 font-headline"
+            >
+              On this page
+            </p>
+            <nav id="toc-nav" aria-label="Article sections" aria-live="polite" class="flex flex-col gap-4 text-sm font-headline">
+            </nav>
+          </div>
+        </aside>
+      </div>
     </div>
-  </header>
-  <main class="pt-28 pb-16 max-w-4xl mx-auto px-8" id="main-content">
-	    <article class="prose prose-invert prose-lg max-w-none [&_p]:my-6 [&_p]:leading-8">
-      <h1
-        class="text-4xl md:text-6xl font-black font-headline tracking-tighter text-on-surface"
-      >
-        {post.data.title}
-      </h1>
-      <p class="text-sm text-outline uppercase tracking-[0.2em]">
-        {post.data.categories.join(", ")} • <a
-          class="hover:text-primary transition-colors"
-          href={`mailto:${post.data.authorEmail}`}
-        >{post.data.author}</a> • {published}
-      </p>
-      <img
-        class="w-full rounded-lg my-8"
-        src={post.data.image}
-        alt={post.data.title}
-      />
-      <Content />
-    </article>
   </main>
+
+  <Footer />
+
+  <script is:inline>
+    // Reading progress bar
+    const progressBar = document.getElementById("reading-progress-bar");
+    const progressContainer = document.getElementById("reading-progress-container");
+    if (progressBar && progressContainer) {
+      const updateProgress = () => {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        const value = Math.min(100, Math.round(pct));
+        progressBar.style.width = value + "%";
+        progressContainer.setAttribute("aria-valuenow", String(value));
+      };
+      window.addEventListener("scroll", updateProgress, { passive: true });
+      updateProgress();
+    }
+
+    // Build Table of Contents from h2/h3 headings
+    const article = document.querySelector("article.prose");
+    const tocNav = document.getElementById("toc-nav");
+    if (article && tocNav) {
+      const headings = article.querySelectorAll("h2, h3");
+      headings.forEach((heading) => {
+        const id = heading.id || heading.textContent?.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "");
+        if (id) heading.id = id;
+        const a = document.createElement("a");
+        a.href = "#" + (heading.id || "");
+        a.textContent = heading.textContent;
+        a.className = "text-on-surface-variant hover:text-primary pl-4 py-0.5 border-l-2 border-outline-variant/20 hover:border-primary transition-all text-xs";
+        tocNav.appendChild(a);
+      });
+
+      // Highlight active heading on scroll
+      const tocLinks = [...tocNav.querySelectorAll("a")];
+      const highlightToc = () => {
+        let current = "";
+        headings.forEach((h) => {
+          const top = h.getBoundingClientRect().top;
+          if (top < 120) current = h.id;
+        });
+        tocLinks.forEach((link) => {
+          const isActive = link.getAttribute("href") === "#" + current;
+          link.classList.toggle("text-primary", isActive);
+          link.classList.toggle("border-primary", isActive);
+          link.classList.toggle("font-bold", isActive);
+          link.classList.toggle("text-on-surface-variant", !isActive);
+          link.classList.toggle("border-outline-variant/20", !isActive);
+          if (isActive) {
+            link.setAttribute("aria-current", "location");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      };
+      window.addEventListener("scroll", highlightToc, { passive: true });
+      highlightToc();
+    }
+  </script>
 </EditorialLayout>

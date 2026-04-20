@@ -8,7 +8,7 @@ categories:
   - "AI"
   - "Coding"
   - "Productivity"
-image: "/images/posts/robot-todo-list.png"
+image: ""
 ---
 
 When people think about project metadata, they usually think about files like `package.json`, `Cargo.toml`, or `go.mod`.

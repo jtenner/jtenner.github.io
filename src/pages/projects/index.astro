@@ -1,6 +1,8 @@
 ---
 import EditorialLayout from "../../layouts/EditorialLayout.astro";
 import { getCollection } from "astro:content";
+import NavHeader from "../../components/NavHeader.astro";
+import Footer from "../../components/Footer.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
 
 const projects = (await getCollection("projects")).sort((a, b) => {
@@ -19,42 +21,9 @@ const projects = (await getCollection("projects")).sort((a, b) => {
   title="Projects | Assembling Me"
   description="Project notes and release links for Joshua Tenner's tooling work."
 >
-  <header
-    class="fixed top-0 w-full z-50 bg-[#0b1326]/80 backdrop-blur-xl shadow-2xl shadow-[#060e20]/40 border-b border-white/5"
-  >
-    <div
-      class="flex items-center justify-between px-8 py-4 max-w-screen-2xl mx-auto"
-    >
-      <a
-        class="text-2xl font-black text-primary tracking-tighter font-headline"
-        href="/"
-      >
-        Assembling Me
-      </a>
-      <nav class="flex gap-8" aria-label="Primary">
-        <a
-          class="text-slate-400 hover:text-slate-100 transition-colors font-headline font-bold uppercase tracking-wider text-xs"
-          href="/"
-        >
-          Blog
-        </a>
-        <a
-          class="text-primary border-b-2 border-primary pb-1 font-headline font-bold uppercase tracking-wider text-xs"
-          href="/projects/"
-          aria-current="page"
-        >
-          Projects
-        </a>
-        <a
-          class="text-slate-400 hover:text-slate-100 transition-colors font-headline font-bold uppercase tracking-wider text-xs"
-          href="mailto:tenner.joshua@gmail.com"
-        >
-          Contact Me
-        </a>
-      </nav>
-    </div>
-  </header>
-  <main class="pt-32 pb-20 max-w-screen-2xl mx-auto px-8" id="main-content">
+  <NavHeader activePage="projects" />
+
+  <main role="main" class="pt-32 pb-20 max-w-screen-2xl mx-auto px-8" id="main-content">
     <header class="mb-10">
       <p class="text-on-surface-variant text-3xl lg:text-5xl font-light leading-tight">
         Featured Projects
@@ -71,4 +40,6 @@ const projects = (await getCollection("projects")).sort((a, b) => {
       {projects.map((project) => <ProjectCard project={project} />)}
     </div>
   </main>
+
+  <Footer />
 </EditorialLayout>

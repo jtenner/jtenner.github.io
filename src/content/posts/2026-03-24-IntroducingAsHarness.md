@@ -9,7 +9,7 @@ categories:
   - "Coding"
   - "Open Source"
   - "Tutorials"
-image: "/images/posts/robot-working-hard.png"
+image: ""
 ---
 
 I have been working on a new AssemblyScript testing framework called `as-harness`.
