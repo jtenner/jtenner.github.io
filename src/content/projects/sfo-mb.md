@@ -5,20 +5,20 @@ semver: "0.1.1"
 github: "https://github.com/jtenner/system-f-omega-moonbit"
 projectUrl: "https://github.com/jtenner/system-f-omega-moonbit"
 latestReleaseUrl: "https://mooncakes.io/docs/jtenner/sfo@0.1.1"
-featured: 3
 ---
 
 ## sfo-mb
 
-`sfo-mb` is a MoonBit port of a System F-ω style typechecker with a focus on explicit type theory features:
+`sfo-mb` is a MoonBit implementation of a System F-ω style typechecker with a small, explicit typed core.
 
-- higher-kinded types (`*` and `k1 -> k2`)
-- polymorphism (`Forall`, `BoundedForall`)
-- records, tuples, variants, and recursive `Mu` types
-- native borrow/reference terms (`borrow_shared`, `borrow_mut`, `deref`, `assign`, `move`)
-- trait dictionaries and constraint-driven resolution
-- import/rename machinery for composing module contexts
+It includes:
 
-The project is intentionally small in surface area but heavy on correctness. It has hundreds of tests and explicit whitebox coverage for both core typing behavior and borrow-specific error paths.
+- Higher-kinded types and type-level functions
+- `Forall` and trait-constrained `BoundedForall` polymorphism
+- Records, tuples, variants, and recursive `Mu` types
+- Trait dictionaries and constraint-driven resolution
+- Native borrow and reference terms, including shared and mutable borrows, dereference, assignment, and move semantics
+- Region and lifetime checks for invalid escapes and conflicting loans
+- Import, dependency, and rename helpers for composing module contexts
 
-If you are building compilers, language tooling, or type-driven APIs, this is a good reference implementation for a practical, stateful algorithmic type checker.
+The project is designed as a practical reference for compiler, DSL, and type-system work where explicit kinds, normalization, inference state, traits, and ownership-style checks need to coexist in one compact implementation.

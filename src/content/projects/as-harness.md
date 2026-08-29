@@ -1,22 +1,26 @@
 ---
 title: "as-harness"
-description: "A modern testing framework for AssemblyScript focused on correctness, WASM-native execution, and improved ergonomics over legacy tools like as-pect."
-semver: "0.2.0"
+description: "An AssemblyScript testing framework that compiles tests to WebAssembly and runs them through deterministic host harnesses, with adapters, coverage, snapshots, and dependency-aware scheduling."
+semver: "0.6.0"
 github: "https://github.com/jtenner/as-harness"
 projectUrl: "https://github.com/jtenner/as-harness"
-latestReleaseUrl: "https://github.com/jtenner/as-harness/releases/tag/v0.2.0"
-featured: 1
+latestReleaseUrl: "https://github.com/jtenner/as-harness/releases/tag/v0.6.0"
 ---
 
 ## as-harness
 
-`as-harness` is a next-generation testing framework for AssemblyScript designed to address limitations in older tooling like `as-pect`.
+`as-harness` is a testing framework for AssemblyScript. It compiles tests to WebAssembly and runs them through a shared harness contract instead of tying the test model to one host runtime.
 
-It provides a WASM-first testing model, enabling deterministic execution and tighter integration with low-level runtime behavior. The framework is built with correctness, extensibility, and developer ergonomics in mind.
+The current release includes:
 
-Key goals include:
+- Native `as-harness` declarations and synchronous `node:test` support
+- Dependency-aware test scheduling with deterministic ordering
+- Host-owned `inBand`, `bail`, and `continueOnFailure` planning hints
+- JavaScript, wazero, and wasmtime runtime hosts
+- Custom runtime harness modules
+- Thin adapters for Jest, Mocha, Jasmine, AVA, TAP, Tape, QUnit, Vitest, and uvu
+- Coverage output in text, JSON, YAML, CSV, LCOV, and Cobertura formats
+- Snapshot update support
+- Structured reporting for planning, blocked tests, aborts, traces, and source locations
 
-- Reliable execution across WASM runtimes
-- Improved assertion and test composition APIs
-- Better support for advanced testing scenarios (e.g. panic/throw simulation)
-- A foundation for fuzzing and harness-driven validation
+The project is still pre-1.0. Its main goal is to give AssemblyScript tests a stable Wasm-first execution contract while keeping the host runtime replaceable.
