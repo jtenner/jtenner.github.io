@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-body { font-family: 'Inter', sans-serif; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #151b26;
+}
+
 .font-headline { font-family: 'Space Grotesk', sans-serif; }
 .font-mono { font-family: 'JetBrains Mono', monospace; }
 .material-symbols-outlined {
@@ -15,15 +19,39 @@ body { font-family: 'Inter', sans-serif; }
 }
 
 .text-glow {
-  text-shadow: 0 0 30px rgba(123, 208, 255, 0.3);
+  text-shadow: 0 0 24px rgba(114, 183, 229, 0.2);
 }
 
 :where(a, button, input, select, textarea, summary):focus-visible {
-  outline: 2px solid #7bd0ff;
+  outline: 2px solid #72b7e5;
   outline-offset: 3px;
 }
 
 /* Prose styles */
+.prose {
+  color: #dce3eb;
+}
+
+.prose p,
+.prose li {
+  color: #dce3eb;
+}
+
+.prose a {
+  color: #91c9ec;
+  text-decoration-color: rgba(145, 201, 236, 0.45);
+  text-underline-offset: 0.2em;
+}
+
+.prose a:hover {
+  color: #b7ddf4;
+  text-decoration-color: currentColor;
+}
+
+.prose strong {
+  color: #f1f5f9;
+}
+
 .prose ul,
 .prose ol {
   list-style-position: outside;
@@ -49,15 +77,16 @@ body { font-family: 'Inter', sans-serif; }
 .prose h4,
 .prose h5,
 .prose h6 {
+  color: #f1f5f9;
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 800;
   line-height: 1.15;
   margin: 2rem 0 1rem;
 }
 
-.prose h1 { font-size: 2.25rem; }
-.prose h2 { font-size: 1.875rem; }
-.prose h3 { font-size: 1.5rem; }
+.prose h1 { font-size: clamp(2rem, 7vw, 2.25rem); }
+.prose h2 { font-size: clamp(1.65rem, 6vw, 1.875rem); }
+.prose h3 { font-size: clamp(1.35rem, 5vw, 1.5rem); }
 .prose h4 { font-size: 1.25rem; }
 .prose h5 { font-size: 1.125rem; }
 .prose h6 {
@@ -66,14 +95,60 @@ body { font-family: 'Inter', sans-serif; }
   letter-spacing: 0.08em;
 }
 
+.prose blockquote {
+  margin: 1.5rem 0;
+  border-left: 3px solid #4d94c3;
+  background: #1b2432;
+  padding: 0.9rem 1rem;
+  color: #b8c2cf;
+}
+
+.prose :not(pre) > code {
+  border: 1px solid #394759;
+  border-radius: 0.3rem;
+  background: #202b3a;
+  color: #d8ecfa;
+  padding: 0.12rem 0.35rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88em;
+}
+
 .prose pre {
   margin: 1.5rem 0;
-  padding: 1rem;
+  padding: 1rem 1.125rem;
   overflow-x: auto;
+  border: 1px solid #394759;
+  border-radius: 0.5rem;
+  background: #111722;
+  box-shadow: 0 12px 30px rgba(4, 9, 15, 0.14);
+  font-size: 0.875rem;
+  line-height: 1.65;
 }
 
 .prose pre code {
   display: block;
   margin: 0;
   padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.prose hr {
+  border-color: #394759;
+  opacity: 0.7;
+}
+
+@media (max-width: 639px) {
+  .prose ul,
+  .prose ol {
+    padding-left: 1.25rem;
+  }
+
+  .prose pre {
+    margin-left: -0.25rem;
+    margin-right: -0.25rem;
+    padding: 0.875rem;
+    font-size: 0.8125rem;
+  }
 }

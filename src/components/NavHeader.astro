@@ -3,56 +3,105 @@ type ActivePage = "blog" | "projects" | "article";
 
 const { activePage = "blog" }: { activePage?: ActivePage } = Astro.props;
 
-const links: { href: string; label: string; page: ActivePage | null; external?: boolean; icon?: string }[] = [
-  { href: "/", label: "Blog", page: "blog" },
-  { href: "/projects/", label: "Projects", page: "projects" },
-  { href: "https://www.linkedin.com/in/joshua-tenner-68316167/", label: "LinkedIn", page: null, external: true, icon: "link" },
-  { href: "https://github.com/jtenner/", label: "GitHub", page: null, external: true, icon: "terminal" },
-  { href: "mailto:tenner.joshua@gmail.com", label: "Contact Me", page: null },
+const primaryLinks = [
+  { href: "/", label: "Blog", page: "blog" as const },
+  { href: "/projects/", label: "Projects", page: "projects" as const },
 ];
+
+const secondaryLinks = [
+  { href: "https://www.linkedin.com/in/joshua-tenner-68316167/", label: "LinkedIn", external: true, icon: "link" },
+  { href: "https://github.com/jtenner/", label: "GitHub", external: true, icon: "terminal" },
+  { href: "mailto:tenner.joshua@gmail.com", label: "Contact Me", external: false, icon: "mail" },
+];
+
+const isPrimaryActive = (page: "blog" | "projects") =>
+  page === activePage || (activePage === "article" && page === "blog");
 ---
 
 <header
   role="banner"
-  class="fixed top-0 w-full z-50 bg-[#0b1326]/80 backdrop-blur-xl shadow-2xl shadow-[#060e20]/40 border-b border-white/5"
+  class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl border-b border-outline-variant/35 shadow-lg shadow-black/10"
 >
-  <div class="flex items-center justify-between px-8 py-4 max-w-screen-2xl mx-auto">
+  <div class="flex items-center justify-between gap-4 px-5 sm:px-6 lg:px-8 py-3.5 sm:py-4 max-w-screen-2xl mx-auto">
     <a
-      class="text-2xl font-black text-primary tracking-tighter font-headline"
+      class="shrink-0 whitespace-nowrap text-xl sm:text-2xl font-black text-primary tracking-tighter font-headline"
       href="/"
       aria-label="Assembling Me home"
     >
       Assembling Me
     </a>
-    <nav role="navigation" class="flex items-center gap-8" aria-label="Primary">
-      {
-        links.map((link) => {
-          const isActive = link.page === activePage;
-          return (
+
+    <nav role="navigation" class="hidden md:flex items-center gap-7 lg:gap-8" aria-label="Primary">
+      {primaryLinks.map((link) => {
+        const isActive = isPrimaryActive(link.page);
+        return (
+          <a
+            class:list={[
+              "font-headline font-bold uppercase tracking-wider text-xs transition-colors flex items-center gap-1.5",
+              isActive
+                ? "text-primary border-b-2 border-primary pb-1"
+                : "text-outline hover:text-on-surface",
+            ]}
+            href={link.href}
+            aria-current={isActive ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        );
+      })}
+      {secondaryLinks.map((link) => (
+        <a
+          class="font-headline font-bold uppercase tracking-wider text-xs transition-colors flex items-center gap-1.5 text-outline hover:text-on-surface"
+          href={link.href}
+          aria-label={link.external ? `${link.label} external link` : undefined}
+        >
+          <span class="material-symbols-outlined text-sm" aria-hidden="true">
+            {link.icon}
+          </span>
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="md:hidden flex items-center gap-3">
+      {primaryLinks.map((link) => {
+        const isActive = isPrimaryActive(link.page);
+        return (
+          <a
+            class:list={[
+              "font-headline font-bold uppercase tracking-wider text-[10px] sm:text-xs transition-colors",
+              isActive ? "text-primary" : "text-outline hover:text-on-surface",
+            ]}
+            href={link.href}
+            aria-current={isActive ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        );
+      })}
+
+      <details class="relative">
+        <summary
+          class="list-none [&::-webkit-details-marker]:hidden flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border border-outline-variant/50 bg-surface-container-low text-outline hover:text-on-surface hover:border-primary/50 transition-colors"
+          aria-label="More links"
+        >
+          <span class="material-symbols-outlined text-xl" aria-hidden="true">menu</span>
+        </summary>
+        <div class="absolute right-0 mt-3 w-44 rounded-lg border border-outline-variant/60 bg-surface-container-high p-2 shadow-2xl shadow-black/20">
+          {secondaryLinks.map((link) => (
             <a
-              class:list={[
-                "font-headline font-bold uppercase tracking-wider text-xs transition-colors flex items-center gap-1.5",
-                isActive
-                  ? "text-primary border-b-2 border-primary pb-1"
-                  : "text-slate-400 hover:text-slate-100",
-              ]}
+              class="flex items-center gap-2 rounded-md px-3 py-2.5 font-headline text-xs font-bold uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-highest hover:text-primary transition-colors"
               href={link.href}
-              aria-current={isActive ? "page" : undefined}
               aria-label={link.external ? `${link.label} external link` : undefined}
             >
-              {link.icon && (
-                <span
-                  class="material-symbols-outlined text-sm"
-                  aria-hidden="true"
-                >
-                  {link.icon}
-                </span>
-              )}
+              <span class="material-symbols-outlined text-base" aria-hidden="true">
+                {link.icon}
+              </span>
               {link.label}
             </a>
-          );
-        })
-      }
-    </nav>
+          ))}
+        </div>
+      </details>
+    </div>
   </div>
 </header>

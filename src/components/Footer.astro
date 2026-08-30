@@ -1,153 +1,101 @@
 ---
 ---
 
-<footer role="contentinfo" class="w-full border-t border-outline-variant/10 bg-[#060e20]">
+<footer role="contentinfo" class="w-full border-t border-outline-variant/35 bg-surface-container-lowest">
   <div
-    class="grid grid-cols-1 md:grid-cols-4 gap-16 px-12 py-24 max-w-screen-2xl mx-auto"
+    class="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-16 px-5 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24 max-w-screen-2xl mx-auto"
   >
-    <div class="md:col-span-2 flex flex-col gap-10">
+    <div class="md:col-span-2 flex flex-col gap-7 sm:gap-10">
       <div
-        class="font-headline font-black text-primary text-3xl tracking-tighter"
+        class="font-headline font-black text-primary text-2xl sm:text-3xl tracking-tighter"
       >
         Assembling Me
       </div>
       <p
-        class="text-slate-400 font-body text-base antialiased leading-relaxed max-w-md"
+        class="text-on-surface-variant font-body text-sm sm:text-base antialiased leading-relaxed max-w-md"
       >
         A practical blog on WebAssembly tooling, compiler systems, and robust
         software architecture.
       </p>
-      <div class="flex gap-6">
+      <div class="flex gap-5 sm:gap-6">
         <a
           aria-label="RSS feed"
-          class="text-slate-500 hover:text-primary transition-colors text-2xl"
+          class="text-outline hover:text-primary transition-colors text-2xl"
           href="/rss.xml"
         >
-          <span aria-hidden="true" class="material-symbols-outlined"
-            >rss_feed</span
-          >
+          <span aria-hidden="true" class="material-symbols-outlined">rss_feed</span>
         </a>
         <a
           aria-label="Email Joshua Tenner"
-          class="text-slate-500 hover:text-primary transition-colors text-2xl"
+          class="text-outline hover:text-primary transition-colors text-2xl"
           href="mailto:tenner.joshua@gmail.com"
         >
-          <span aria-hidden="true" class="material-symbols-outlined"
-            >mail</span
-          >
+          <span aria-hidden="true" class="material-symbols-outlined">mail</span>
         </a>
         <a
           aria-label="Joshua Tenner on LinkedIn (opens in new tab)"
-          class="text-slate-500 hover:text-primary transition-colors text-2xl"
+          class="text-outline hover:text-primary transition-colors text-2xl"
           href="https://www.linkedin.com/in/joshua-tenner-68316167/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span aria-hidden="true" class="material-symbols-outlined"
-            >link</span
-          >
+          <span aria-hidden="true" class="material-symbols-outlined">link</span>
         </a>
         <a
           aria-label="Joshua Tenner on GitHub (opens in new tab)"
-          class="text-slate-500 hover:text-primary transition-colors text-2xl"
+          class="text-outline hover:text-primary transition-colors text-2xl"
           href="https://github.com/jtenner/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span aria-hidden="true" class="material-symbols-outlined"
-            >terminal</span
-          >
+          <span aria-hidden="true" class="material-symbols-outlined">terminal</span>
         </a>
       </div>
     </div>
-    <div class="flex flex-col gap-10">
+    <div class="flex flex-col gap-6 sm:gap-10">
       <h2
-        class="font-headline font-black text-on-surface text-[10px] uppercase tracking-[0.3em] text-primary"
+        class="font-headline font-black text-[10px] uppercase tracking-[0.3em] text-primary"
       >
         Topics
       </h2>
       <ul
-        class="flex flex-col gap-5 font-headline font-bold text-xs uppercase tracking-widest"
+        class="flex flex-col gap-4 sm:gap-5 font-headline font-bold text-xs uppercase tracking-widest"
       >
-        <li>
-          <a
-            class="text-slate-500 hover:text-white transition-colors"
-            href="/?category=WASM"
-          >
-            WASM
-          </a>
-        </li>
-        <li>
-          <a
-            class="text-slate-500 hover:text-white transition-colors"
-            href="/?category=AI"
-          >
-            AI
-          </a>
-        </li>
-        <li>
-          <a
-            class="text-slate-500 hover:text-white transition-colors"
-            href="/?category=Open+Source"
-          >
-            Open Source
-          </a>
-        </li>
-        <li>
-          <a
-            class="text-slate-500 hover:text-white transition-colors"
-            href="/?category=Tutorials"
-          >
-            Tutorials
-          </a>
-        </li>
+        <li><a class="text-outline hover:text-on-surface transition-colors" href="/?category=WASM">WASM</a></li>
+        <li><a class="text-outline hover:text-on-surface transition-colors" href="/?category=AI">AI</a></li>
+        <li><a class="text-outline hover:text-on-surface transition-colors" href="/?category=Open+Source">Open Source</a></li>
+        <li><a class="text-outline hover:text-on-surface transition-colors" href="/?category=Tutorials">Tutorials</a></li>
       </ul>
     </div>
-    <div class="flex flex-col gap-10">
+    <div class="flex flex-col gap-6 sm:gap-10">
       <h2
-        class="font-headline font-black text-on-surface text-[10px] uppercase tracking-[0.3em] text-primary"
+        class="font-headline font-black text-[10px] uppercase tracking-[0.3em] text-primary"
       >
         Links
       </h2>
-      <p class="text-slate-400 text-sm leading-relaxed">
+      <p class="text-on-surface-variant text-sm leading-relaxed">
         Follow the RSS feed for updates or reach out directly.
       </p>
       <div class="flex flex-col gap-3 text-sm">
-        <a
-          class="text-primary hover:text-white transition-colors"
-          href="/rss.xml"
-        >
-          Subscribe via RSS
-        </a>
-        <a
-          class="text-primary hover:text-white transition-colors"
-          href="mailto:tenner.joshua@gmail.com"
-        >
-          Contact Joshua
-        </a>
+        <a class="text-primary hover:text-primary-fixed transition-colors" href="/rss.xml">Subscribe via RSS</a>
+        <a class="text-primary hover:text-primary-fixed transition-colors" href="mailto:tenner.joshua@gmail.com">Contact Joshua</a>
       </div>
     </div>
   </div>
   <div
-    class="max-w-screen-2xl mx-auto px-12 py-10 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-6"
+    class="max-w-screen-2xl mx-auto px-5 sm:px-6 lg:px-8 py-8 sm:py-10 border-t border-outline-variant/35 flex flex-col sm:flex-row justify-between items-center gap-5 sm:gap-6"
   >
     <p
-      class="text-slate-600 font-headline font-bold text-[10px] uppercase tracking-widest antialiased"
+      class="text-outline font-headline font-bold text-[10px] uppercase tracking-widest antialiased"
     >
       © 2026 Assembling Me.
     </p>
     <div
-      class="flex gap-8 text-slate-600 font-headline font-bold text-[10px] uppercase tracking-widest"
+      class="flex gap-6 sm:gap-8 text-outline font-headline font-bold text-[10px] uppercase tracking-widest"
     >
-      <a class="hover:text-white transition-colors" href="/privacy/"
-        >Privacy</a
-      >
-      <a class="hover:text-white transition-colors" href="/terms/"
-        >Terms</a
-      >
-      <a class="hover:text-white transition-colors" href="/license/"
-        >License</a
-      >
+      <a class="hover:text-on-surface transition-colors" href="/privacy/">Privacy</a>
+      <a class="hover:text-on-surface transition-colors" href="/terms/">Terms</a>
+      <a class="hover:text-on-surface transition-colors" href="/license/">License</a>
     </div>
   </div>
 </footer>

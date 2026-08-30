@@ -89,40 +89,38 @@ const jsonLd = [
 >
   <NavHeader activePage="blog" />
 
-  <main role="main" class="pt-16" id="main-content">
-    <!-- Hero with Starfield -->
-    <section class="relative w-full" style="background: radial-gradient(ellipse at 50% 0%, rgba(123,208,255,0.08) 0%, transparent 60%);">
-      <StarField height="500px" parallax={true} />
+  <main role="main" class="pt-14 sm:pt-16" id="main-content">
+    <section class="relative w-full" style="background: radial-gradient(ellipse at 50% 0%, rgba(114,183,229,0.10) 0%, transparent 62%);">
+      <StarField height="460px" parallax={true} />
       <div
-        class="absolute inset-0 flex flex-col items-center justify-center text-center px-6"
-        style="background: linear-gradient(to bottom, transparent 30%, #0b1326 95%);"
+        class="absolute inset-0 flex flex-col items-center justify-center text-center px-5 sm:px-6"
+        style="background: linear-gradient(to bottom, transparent 26%, #151b26 96%);"
       >
         <h1
-          class="text-5xl sm:text-7xl lg:text-8xl font-black font-headline tracking-tighter text-on-surface leading-[0.9]"
+          class="text-4xl sm:text-6xl lg:text-8xl font-black font-headline tracking-tighter text-on-surface leading-[0.95]"
         >
           Assembling Me
         </h1>
         <p
-          class="mt-6 max-w-2xl text-base sm:text-lg text-on-surface-variant leading-relaxed"
+          class="mt-5 sm:mt-6 max-w-2xl text-base sm:text-lg text-on-surface-variant leading-relaxed"
         >
           I build compilers, WebAssembly runtimes, programming languages, and developer tools.
           I write about optimization, WebAssembly GC, fuzzing, code generation, runtime design, and the problems I find while building them.
         </p>
-        <div class="mt-8 w-full max-w-sm">
+        <div class="mt-7 sm:mt-8 w-full max-w-sm">
           <AuthorBio compact={true} />
         </div>
       </div>
     </section>
 
-    <!-- Project ecosystem -->
-    <section class="max-w-screen-2xl mx-auto px-8 pt-20" aria-labelledby="building-heading">
+    <section class="max-w-screen-2xl mx-auto px-5 sm:px-6 lg:px-8 pt-14 sm:pt-20" aria-labelledby="building-heading">
       <div class="max-w-4xl">
         <p class="text-[10px] font-bold uppercase tracking-widest text-primary font-headline">
           What I’m building
         </p>
         <h2
           id="building-heading"
-          class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black font-headline tracking-tighter text-on-surface"
+          class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black font-headline tracking-tighter text-on-surface leading-[1.08]"
         >
           One set of tools, from source code to system calls
         </h2>
@@ -131,11 +129,11 @@ const jsonLd = [
         </p>
       </div>
 
-      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div class="mt-8 sm:mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {projectLayers.map((project) => (
           <a
             href={project.href}
-            class="block rounded-lg border border-outline-variant/20 bg-surface-container-low p-6 hover:border-primary/60 transition-colors"
+            class="block rounded-lg border border-outline-variant/45 bg-surface-container-low p-5 sm:p-6 hover:border-primary/55 hover:bg-surface-container transition-colors"
           >
             <p class="text-[10px] font-bold uppercase tracking-widest text-primary font-headline">
               {project.role}
@@ -143,25 +141,23 @@ const jsonLd = [
             <h3 class="mt-2 text-xl font-black font-headline text-on-surface">
               {project.title}
             </h3>
-            <p class="mt-3 text-sm leading-relaxed text-outline">
+            <p class="mt-3 text-sm leading-relaxed text-on-surface-variant">
               {project.description}
             </p>
           </a>
         ))}
       </div>
 
-      <p class="mt-8 max-w-4xl text-sm leading-relaxed text-outline">
+      <p class="mt-7 sm:mt-8 max-w-4xl text-sm leading-relaxed text-outline">
         I use this site as an engineering record. Project pages describe the current design. Older articles remain dated snapshots, with update notes when the project has changed in an important way.
       </p>
     </section>
 
-    <!-- Posts + Sidebar -->
-    <section class="max-w-screen-2xl mx-auto px-8 py-20 grid grid-cols-1 lg:grid-cols-12 gap-16">
-      <!-- Posts -->
-      <div class="lg:col-span-8">
+    <section class="max-w-screen-2xl mx-auto px-5 sm:px-6 lg:px-8 py-14 sm:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+      <div class="lg:col-span-8 min-w-0">
         <div
           id="post-list"
-          class="space-y-8"
+          class="space-y-6 sm:space-y-8"
           data-post-list
           aria-label="Blog posts"
         >
@@ -291,8 +287,7 @@ const jsonLd = [
         </script>
       </div>
 
-      <!-- Sidebar -->
-      <aside class="lg:col-span-4 space-y-16">
+      <aside class="lg:col-span-4 space-y-10 lg:space-y-16">
         <section aria-labelledby="category-filters-heading">
           <h4
             id="category-filters-heading"
@@ -300,7 +295,7 @@ const jsonLd = [
           >
             Categories
           </h4>
-          <div class="flex flex-wrap gap-3" aria-label="Filter posts by category">
+          <div class="flex flex-wrap gap-2 sm:gap-3" aria-label="Filter posts by category">
             {
               categoryFilters.map((category) => (
                 <a
@@ -309,7 +304,7 @@ const jsonLd = [
                   role="button"
                   aria-pressed={category === selectedCategory ? "true" : "false"}
                   aria-controls="post-list"
-                  class={`px-3 py-2 text-[10px] font-headline font-black uppercase tracking-[0.2em] border border-outline-variant/30 transition-all ${
+                  class={`px-3 py-2 text-[10px] font-headline font-black uppercase tracking-[0.18em] border border-outline-variant/45 rounded transition-all ${
                     category === selectedCategory
                       ? "bg-surface-container-high border-primary text-primary"
                       : "text-outline"
@@ -324,7 +319,7 @@ const jsonLd = [
         </section>
 
         <div
-          class="p-8 bg-surface-container-low border-b-2 border-transparent focus-within:border-primary transition-all"
+          class="p-5 sm:p-8 bg-surface-container-low border border-outline-variant/40 rounded-lg focus-within:border-primary transition-all"
         >
           <h4
             id="search-label"
@@ -337,7 +332,7 @@ const jsonLd = [
               aria-labelledby="search-label"
               aria-controls="post-list"
               data-library-search
-              class="w-full bg-transparent border-none p-0 focus:ring-0 text-xl font-headline font-medium placeholder:text-outline-variant text-on-surface"
+              class="w-full bg-transparent border-none p-0 focus:ring-0 text-lg sm:text-xl font-headline font-medium placeholder:text-outline text-on-surface"
               placeholder="Search topics..."
               type="search"
               autocomplete="off"

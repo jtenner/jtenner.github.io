@@ -61,7 +61,6 @@ const categories = post.data.categories ?? [];
   jsonLd={jsonLd}
   openGraphType="article"
 >
-  <!-- Reading progress bar -->
   <div
     class="fixed top-0 left-0 w-full h-[2px] bg-primary-container z-[60]"
     id="reading-progress-container"
@@ -80,17 +79,15 @@ const categories = post.data.categories ?? [];
 
   <NavHeader activePage="article" />
 
-  <main role="main" class="pt-28 pb-20" id="main-content">
-    <div class="max-w-screen-2xl mx-auto px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-        <!-- Main content area -->
-        <div class="lg:col-span-9">
-          <!-- Post header -->
-          <header class="mb-16 max-w-3xl">
-            <div class="flex items-center gap-3 mb-6" aria-label="Categories">
+  <main role="main" class="pt-24 sm:pt-28 pb-16 sm:pb-20" id="main-content">
+    <div class="max-w-screen-2xl mx-auto px-5 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+        <div class="lg:col-span-9 min-w-0">
+          <header class="mb-10 sm:mb-14 max-w-3xl">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-5 sm:mb-6" aria-label="Categories">
               {categories.map((cat) => (
                 <span
-                  class="px-3 py-1 text-[10px] font-headline font-black uppercase tracking-[0.2em] text-on-surface bg-surface-container-low border border-outline-variant/15"
+                  class="px-2.5 sm:px-3 py-1 text-[9px] sm:text-[10px] font-headline font-black uppercase tracking-[0.18em] sm:tracking-[0.2em] text-on-surface-variant bg-surface-container-low border border-outline-variant/45 rounded"
                 >
                   {cat}
                 </span>
@@ -99,14 +96,14 @@ const categories = post.data.categories ?? [];
 
             <h1
               id={articleTitleId}
-              class="text-4xl md:text-6xl lg:text-7xl font-black font-headline tracking-tighter text-on-surface leading-[0.9] mb-8"
+              class="text-[2rem] sm:text-5xl md:text-6xl lg:text-7xl font-black font-headline tracking-[-0.035em] text-on-surface leading-[1.04] sm:leading-[0.98] mb-6 sm:mb-8 break-words"
             >
               {post.data.title}
             </h1>
 
             <div
               id={articleMetaId}
-              class="flex items-center gap-4 text-sm text-outline font-headline tracking-wider"
+              class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs sm:text-sm text-outline font-headline tracking-wide sm:tracking-wider"
             >
               <a
                 class="hover:text-primary transition-colors font-bold"
@@ -114,50 +111,46 @@ const categories = post.data.categories ?? [];
               >
                 {post.data.author}
               </a>
-              <span class="text-outline-variant">•</span>
+              <span class="text-outline-variant" aria-hidden="true">•</span>
               <time datetime={String(post.data.pubDate)}>{published}</time>
             </div>
           </header>
 
-          <!-- Article content -->
           <article
             aria-labelledby={articleTitleId}
             aria-describedby={articleMetaId}
-            class="prose prose-invert prose-lg max-w-3xl [&_p]:my-6 [&_p]:leading-8"
+            class="prose prose-invert max-w-3xl text-[17px] sm:text-lg [&_p]:my-5 sm:[&_p]:my-6 [&_p]:leading-[1.75]"
           >
             <Content />
           </article>
 
-          <!-- Author bio -->
-          <div class="mt-20 max-w-3xl">
+          <div class="mt-14 sm:mt-20 max-w-3xl">
             <AuthorBio />
           </div>
 
-          <!-- Related posts -->
           {relatedPosts.length > 0 && (
-            <section aria-labelledby={relatedHeadingId} class="mt-24 max-w-full">
+            <section aria-labelledby={relatedHeadingId} class="mt-16 sm:mt-24 max-w-full">
               <h2
                 id={relatedHeadingId}
-                class="text-3xl font-black font-headline tracking-tighter text-on-surface mb-10"
+                class="text-2xl sm:text-3xl font-black font-headline tracking-tighter text-on-surface mb-7 sm:mb-10"
               >
                 Continue Reading
               </h2>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
                 {relatedPosts.map((rp, i) => <PostCard post={rp} index={i} />)}
               </div>
             </section>
           )}
         </div>
 
-        <!-- Right sidebar: Table of Contents -->
         <aside class="hidden lg:block lg:col-span-3">
-          <div class="sticky top-40">
+          <div class="sticky top-36">
             <p
-              class="text-[10px] font-black uppercase tracking-[0.25em] text-primary mb-8 font-headline"
+              class="text-[10px] font-black uppercase tracking-[0.25em] text-primary mb-7 font-headline"
             >
               On this page
             </p>
-            <nav id="toc-nav" aria-label="Article sections" aria-live="polite" class="flex flex-col gap-4 text-sm font-headline">
+            <nav id="toc-nav" aria-label="Article sections" aria-live="polite" class="flex flex-col gap-3 text-sm font-headline">
             </nav>
           </div>
         </aside>
@@ -168,7 +161,6 @@ const categories = post.data.categories ?? [];
   <Footer />
 
   <script is:inline>
-    // Reading progress bar
     const progressBar = document.getElementById("reading-progress-bar");
     const progressContainer = document.getElementById("reading-progress-container");
     if (progressBar && progressContainer) {
@@ -184,7 +176,6 @@ const categories = post.data.categories ?? [];
       updateProgress();
     }
 
-    // Build Table of Contents from h2/h3 headings
     const article = document.querySelector("article.prose");
     const tocNav = document.getElementById("toc-nav");
     if (article && tocNav) {
@@ -195,11 +186,10 @@ const categories = post.data.categories ?? [];
         const a = document.createElement("a");
         a.href = "#" + (heading.id || "");
         a.textContent = heading.textContent;
-        a.className = "text-on-surface-variant hover:text-primary pl-4 py-0.5 border-l-2 border-outline-variant/20 hover:border-primary transition-all text-xs";
+        a.className = "text-on-surface-variant hover:text-primary pl-4 py-0.5 border-l-2 border-outline-variant/40 hover:border-primary transition-all text-xs";
         tocNav.appendChild(a);
       });
 
-      // Highlight active heading on scroll
       const tocLinks = [...tocNav.querySelectorAll("a")];
       const highlightToc = () => {
         let current = "";
@@ -213,7 +203,7 @@ const categories = post.data.categories ?? [];
           link.classList.toggle("border-primary", isActive);
           link.classList.toggle("font-bold", isActive);
           link.classList.toggle("text-on-surface-variant", !isActive);
-          link.classList.toggle("border-outline-variant/20", !isActive);
+          link.classList.toggle("border-outline-variant/40", !isActive);
           if (isActive) {
             link.setAttribute("aria-current", "location");
           } else {

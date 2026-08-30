@@ -4,8 +4,8 @@ import JsonLd from "../components/JsonLd.astro";
 import type { JsonLdPayload } from "../lib/structuredData";
 
 const {
-  title = "Assembling Me | The Editorial Architect",
-  description = "Notes on compilers, WebAssembly, testing infrastructure, and practical systems work.",
+  title = "Assembling Me | Joshua Tenner",
+  description = "Compiler and runtime engineering notes about WebAssembly, programming languages, optimization, fuzzing, and developer tools.",
   bodyClass = "",
   jsonLd,
   image = "/images/hero-home.png",
@@ -42,7 +42,7 @@ const robots = noindex ? "noindex, nofollow" : "index, follow";
     <title>{title}</title>
     <meta content={description} name="description" />
     <meta content={robots} name="robots" />
-    <meta content="#0b1326" name="theme-color" />
+    <meta content="#151b26" name="theme-color" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" href={iconUrl} sizes="any" type="image/svg+xml" />
     <link rel="manifest" href={manifestUrl} />

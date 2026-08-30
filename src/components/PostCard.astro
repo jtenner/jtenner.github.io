@@ -12,21 +12,21 @@ const categories = post.data.categories ?? [];
 const tag = categories[0] ?? "Coding";
 
 const CATEGORY_COLORS: Record<string, string> = {
-  WASM: "#008abb",
-  Coding: "#7bd0ff",
-  AI: "#ffafd3",
-  "Open Source": "#b9c8de",
-  Tutorials: "#c4e7ff",
-  Tech: "#909097",
-  Productivity: "#ffd8e7",
-  Web: "#7bd0ff",
-  DevOps: "#45464d",
-  Security: "#ffb4ab",
-  Music: "#cf5497",
-  "Social Media": "#a7b6cc",
+  WASM: "#72b7e5",
+  Coding: "#91c9ec",
+  AI: "#9bb6cb",
+  "Open Source": "#aab8c8",
+  Tutorials: "#b7ddf4",
+  Tech: "#8492a6",
+  Productivity: "#9bb6cb",
+  Web: "#72b7e5",
+  DevOps: "#6f8298",
+  Security: "#d7a4a0",
+  Music: "#9bb6cb",
+  "Social Media": "#aab8c8",
 };
 
-const color = CATEGORY_COLORS[tag] ?? "#7bd0ff";
+const color = CATEGORY_COLORS[tag] ?? "#72b7e5";
 const cardId = `post-card-${post.slug.replace(/[^a-z0-9-]/gi, "-")}`;
 const titleId = `${cardId}-title`;
 const descriptionId = `${cardId}-description`;
@@ -42,32 +42,32 @@ const published = new Intl.DateTimeFormat("en-US", {
   href={`/posts/${post.slug}`}
   aria-labelledby={titleId}
   aria-describedby={`${descriptionId} ${metaId}`}
-  class="group block bg-surface-container-low border border-outline-variant/15 hover:border-primary/30 transition-all duration-300 p-8 md:p-10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5"
+  class="group block rounded-lg bg-surface-container-low border border-outline-variant/45 hover:border-primary/55 transition-all duration-300 p-5 sm:p-7 md:p-9 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/10"
 >
   <div class="flex flex-col h-full">
     <span
-      class="inline-block self-start px-3 py-1 text-[10px] font-headline font-black uppercase tracking-[0.2em] text-on-surface mb-5"
-      style={`background: linear-gradient(135deg, ${color}22, ${color}44); border: 1px solid ${color}33;`}
+      class="inline-block self-start px-2.5 sm:px-3 py-1 text-[9px] sm:text-[10px] font-headline font-black uppercase tracking-[0.18em] sm:tracking-[0.2em] text-on-surface-variant mb-4 sm:mb-5 rounded"
+      style={`background: linear-gradient(135deg, ${color}18, ${color}2c); border: 1px solid ${color}48;`}
     >
       {tag}
     </span>
 
     <h3
       id={titleId}
-      class="text-2xl md:text-3xl font-black font-headline tracking-tight text-on-surface leading-tight mb-4 group-hover:text-primary transition-colors"
+      class="text-xl sm:text-2xl md:text-3xl font-black font-headline tracking-tight text-on-surface leading-[1.15] mb-3 sm:mb-4 group-hover:text-primary transition-colors"
     >
       {post.data.title}
     </h3>
 
-    <p id={descriptionId} class="text-on-surface-variant text-sm leading-relaxed mb-8 flex-1 font-light">
+    <p id={descriptionId} class="text-on-surface-variant text-sm leading-relaxed mb-6 sm:mb-8 flex-1">
       {post.data.description}
     </p>
 
     <div
       id={metaId}
-      class="flex items-center justify-between pt-5 border-t border-outline-variant/10"
+      class="flex flex-wrap items-center justify-between gap-3 pt-4 sm:pt-5 border-t border-outline-variant/35"
     >
-      <div class="flex items-center gap-3">
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
         <span
           class="text-on-surface font-bold font-headline text-[10px] uppercase tracking-wider"
         >
@@ -79,6 +79,7 @@ const published = new Intl.DateTimeFormat("en-US", {
       </div>
       <span
         class="material-symbols-outlined text-primary text-sm group-hover:translate-x-1 transition-transform"
+        aria-hidden="true"
       >
         arrow_forward
       </span>

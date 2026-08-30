@@ -24,33 +24,33 @@ const github = parseGithubReference(project.data.github);
 >
   <NavHeader activePage="projects" />
 
-  <main class="pt-28 pb-16 max-w-4xl mx-auto px-8" id="main-content">
+  <main class="pt-24 sm:pt-28 pb-14 sm:pb-16 max-w-4xl mx-auto px-5 sm:px-6 lg:px-8" id="main-content">
     <article
-      class="prose prose-invert prose-lg max-w-none [&_p]:my-6 [&_p]:leading-8"
+      class="prose prose-invert max-w-none text-[17px] sm:text-lg [&_p]:my-5 sm:[&_p]:my-6 [&_p]:leading-[1.75]"
     >
-      <h1 class="text-4xl md:text-6xl font-black font-headline tracking-tighter text-on-surface">
+      <h1 class="text-[2rem] sm:text-5xl md:text-6xl font-black font-headline tracking-tighter text-on-surface leading-[1.04] break-words">
         <a
-          class="hover:text-primary transition-colors"
+          class="hover:text-primary transition-colors no-underline"
           href={project.data.projectUrl}
         >
           {project.data.title}
         </a>
       </h1>
-      <p class="text-sm text-outline">
+      <p class="text-xs sm:text-sm text-outline flex flex-wrap gap-x-4 gap-y-2">
         <a
           href={project.data.latestReleaseUrl}
-          class="mr-4 text-outline font-mono hover:text-on-surface transition-colors"
+          class="text-outline font-mono hover:text-primary transition-colors"
         >
           {project.data.semver}
         </a>
         <a
-          class="text-outline hover:text-on-surface transition-colors"
+          class="text-outline hover:text-primary transition-colors"
           href={github.ownerUrl ?? project.data.github}
         >
           @{github.owner}
         </a>
       </p>
-      <p class="text-on-surface-variant">{project.data.description}</p>
+      <p class="text-on-surface-variant text-base sm:text-lg">{project.data.description}</p>
       <Content />
     </article>
   </main>

@@ -23,20 +23,20 @@ const projects = (await getCollection("projects")).sort((a, b) => {
 >
   <NavHeader activePage="projects" />
 
-  <main role="main" class="pt-32 pb-20 max-w-screen-2xl mx-auto px-8" id="main-content">
-    <header class="mb-12 max-w-4xl">
-      <p class="text-[10px] font-bold uppercase tracking-widest text-primary font-headline mb-4">
+  <main role="main" class="pt-24 sm:pt-28 lg:pt-32 pb-16 sm:pb-20 max-w-screen-2xl mx-auto px-5 sm:px-6 lg:px-8" id="main-content">
+    <header class="mb-9 sm:mb-12 max-w-4xl">
+      <p class="text-[10px] font-bold uppercase tracking-widest text-primary font-headline mb-3 sm:mb-4">
         Projects
       </p>
-      <h1 class="text-on-surface text-4xl lg:text-6xl font-black font-headline tracking-tighter leading-tight">
+      <h1 class="text-on-surface text-3xl sm:text-4xl lg:text-6xl font-black font-headline tracking-tighter leading-[1.05]">
         Tools that meet at the WebAssembly boundary
       </h1>
-      <p class="mt-6 text-on-surface-variant text-lg leading-relaxed">
+      <p class="mt-5 sm:mt-6 text-on-surface-variant text-base sm:text-lg leading-relaxed">
         These projects cover different layers of the same systems work. Wago runs WebAssembly. Dewdrop compiles Dew to WebAssembly GC. Starshine validates and optimizes WebAssembly. Facet defines system calls for modern Core WebAssembly. Other projects explore process models, type systems, and testing infrastructure.
       </p>
     </header>
 
-    <div class="space-y-5">
+    <div class="space-y-4 sm:space-y-5">
       {projects.length === 0 && (
         <p class="text-outline">
           No projects yet. Add files in <code class="font-mono">src/content/projects</code>.

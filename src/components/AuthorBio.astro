@@ -8,8 +8,8 @@ const { compact = false } = Astro.props;
 
 <div
   class:list={[
-    "bg-surface-container-low border border-outline-variant/10",
-    compact ? "rounded px-6 py-5" : "rounded-xl p-10",
+    "bg-surface-container-low border border-outline-variant/40",
+    compact ? "rounded-lg px-5 py-4 sm:px-6 sm:py-5" : "rounded-xl p-6 sm:p-8 lg:p-10",
   ]}
 >
   <div class:list={[compact ? "flex flex-col gap-3" : "flex flex-col gap-6"]}>
@@ -39,25 +39,21 @@ const { compact = false } = Astro.props;
     <div class="flex items-center gap-4">
       <a
         aria-label="Joshua Tenner on LinkedIn (opens in new tab)"
-        class="text-slate-500 hover:text-primary transition-colors"
+        class="text-outline hover:text-primary transition-colors"
         href="https://www.linkedin.com/in/joshua-tenner-68316167/"
         target="_blank"
         rel="noopener noreferrer"
       >
-        <span aria-hidden="true" class="material-symbols-outlined text-lg"
-          >link</span
-        >
+        <span aria-hidden="true" class="material-symbols-outlined text-lg">link</span>
       </a>
       <a
         aria-label="Joshua Tenner on GitHub (opens in new tab)"
-        class="text-slate-500 hover:text-primary transition-colors"
+        class="text-outline hover:text-primary transition-colors"
         href="https://github.com/jtenner/"
         target="_blank"
         rel="noopener noreferrer"
       >
-        <span aria-hidden="true" class="material-symbols-outlined text-lg"
-          >terminal</span
-        >
+        <span aria-hidden="true" class="material-symbols-outlined text-lg">terminal</span>
       </a>
     </div>
   </div>

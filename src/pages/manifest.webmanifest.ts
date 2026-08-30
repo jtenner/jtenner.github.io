@@ -4,11 +4,11 @@ const manifest = {
   name: "Assembling Me",
   short_name: "Assembling Me",
   description:
-    "Notes on compilers, WebAssembly, testing infrastructure, and practical systems work.",
+    "Compiler and runtime engineering notes about WebAssembly, programming languages, optimization, fuzzing, and developer tools.",
   start_url: "/",
   display: "standalone",
-  background_color: "#0b1326",
-  theme_color: "#0b1326",
+  background_color: "#151b26",
+  theme_color: "#151b26",
   icons: [
     {
       src: "/favicon.svg",
