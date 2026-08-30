@@ -19,6 +19,45 @@ const allPosts = (await getCollection("posts")).sort(
     new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf(),
 );
 
+const projectLayers = [
+  {
+    title: "Wago",
+    role: "Runtime",
+    href: "/projects/wago",
+    description: "Compiles WebAssembly to native code and runs it from Go, the CLI, or standalone executables.",
+  },
+  {
+    title: "Dewdrop",
+    role: "Language",
+    href: "/projects/dewdrop",
+    description: "Compiles the Dew programming language directly to WebAssembly GC.",
+  },
+  {
+    title: "Starshine",
+    role: "Optimizer",
+    href: "/projects/starshine-mb",
+    description: "Parses, validates, transforms, fuzzes, and optimizes WebAssembly modules.",
+  },
+  {
+    title: "Facet",
+    role: "System interface",
+    href: "/projects/facet",
+    description: "Defines system calls for Memory32, Memory64, multi-memory, and WebAssembly GC data.",
+  },
+  {
+    title: "stage_left",
+    role: "Process model",
+    href: "/projects/stage-left",
+    description: "Explores actor-style processes, links, signals, and typed messages for Core WebAssembly.",
+  },
+  {
+    title: "as-harness",
+    role: "Testing",
+    href: "/projects/as-harness",
+    description: "Runs AssemblyScript tests through deterministic, replaceable WebAssembly hosts.",
+  },
+];
+
 const categoryParam = Astro.url.searchParams.get("category") ?? "All";
 const categoryFilters = [
   "All",
@@ -33,6 +72,7 @@ const jsonLd = [
   buildWebsiteSchema({
     site,
     name: BLOG_IDENTITY.siteName,
+    description: "Compiler and runtime engineering notes about WebAssembly, programming languages, optimization, fuzzing, and developer tools.",
     publisher: BLOG_IDENTITY.publisher,
   }),
   buildHomepageItemListSchema({
@@ -43,8 +83,8 @@ const jsonLd = [
 ---
 
 <EditorialLayout
-  title="Assembling Me | The Editorial Architect"
-  description="Notes on compilers, WebAssembly, testing infrastructure, and practical systems work."
+  title="Assembling Me | Joshua Tenner"
+  description="Compiler and runtime engineering notes about WebAssembly, programming languages, optimization, fuzzing, and developer tools."
   jsonLd={jsonLd}
 >
   <NavHeader activePage="blog" />
@@ -65,13 +105,54 @@ const jsonLd = [
         <p
           class="mt-6 max-w-2xl text-base sm:text-lg text-on-surface-variant leading-relaxed"
         >
-          Notes on compilers, WebAssembly, testing infrastructure, and the
-          awkward systems problems that show up when tools start getting real.
+          I build compilers, WebAssembly runtimes, programming languages, and developer tools.
+          I write about optimization, WebAssembly GC, fuzzing, code generation, runtime design, and the problems I find while building them.
         </p>
         <div class="mt-8 w-full max-w-sm">
           <AuthorBio compact={true} />
         </div>
       </div>
+    </section>
+
+    <!-- Project ecosystem -->
+    <section class="max-w-screen-2xl mx-auto px-8 pt-20" aria-labelledby="building-heading">
+      <div class="max-w-4xl">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-primary font-headline">
+          What I’m building
+        </p>
+        <h2
+          id="building-heading"
+          class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black font-headline tracking-tighter text-on-surface"
+        >
+          One set of tools, from source code to system calls
+        </h2>
+        <p class="mt-5 text-on-surface-variant text-base sm:text-lg leading-relaxed">
+          These are separate projects, but they meet at the same boundary. Dewdrop produces WebAssembly GC. Starshine works on WebAssembly modules. Wago runs them. Facet gives guests access to host services. Stage Left explores isolated processes. as-harness tests code across replaceable WebAssembly hosts.
+        </p>
+      </div>
+
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        {projectLayers.map((project) => (
+          <a
+            href={project.href}
+            class="block rounded-lg border border-outline-variant/20 bg-surface-container-low p-6 hover:border-primary/60 transition-colors"
+          >
+            <p class="text-[10px] font-bold uppercase tracking-widest text-primary font-headline">
+              {project.role}
+            </p>
+            <h3 class="mt-2 text-xl font-black font-headline text-on-surface">
+              {project.title}
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-outline">
+              {project.description}
+            </p>
+          </a>
+        ))}
+      </div>
+
+      <p class="mt-8 max-w-4xl text-sm leading-relaxed text-outline">
+        I use this site as an engineering record. Project pages describe the current design. Older articles remain dated snapshots, with update notes when the project has changed in an important way.
+      </p>
     </section>
 
     <!-- Posts + Sidebar -->

@@ -1,6 +1,6 @@
 ---
 title: "sfo-mb"
-description: "A fully tested System F-ω style typechecker in MoonBit, featuring higher-kinded types, traits, recursive types, borrow checking, and import/rename tooling."
+description: "A System F-ω style type checker in MoonBit with higher-kinded types, traits, recursive types, borrow checks, and module composition tools."
 semver: "0.1.1"
 github: "https://github.com/jtenner/system-f-omega-moonbit"
 projectUrl: "https://github.com/jtenner/system-f-omega-moonbit"
@@ -9,16 +9,22 @@ latestReleaseUrl: "https://mooncakes.io/docs/jtenner/sfo@0.1.1"
 
 ## sfo-mb
 
-`sfo-mb` is a MoonBit implementation of a System F-ω style typechecker with a small, explicit typed core.
+`sfo-mb` is a small type-checking library written in MoonBit. It uses ideas from System F-ω, a typed lambda calculus that supports polymorphism and type-level functions.
 
-It includes:
+### What it models
 
-- Higher-kinded types and type-level functions
-- `Forall` and trait-constrained `BoundedForall` polymorphism
-- Records, tuples, variants, and recursive `Mu` types
-- Trait dictionaries and constraint-driven resolution
-- Native borrow and reference terms, including shared and mutable borrows, dereference, assignment, and move semantics
-- Region and lifetime checks for invalid escapes and conflicting loans
-- Import, dependency, and rename helpers for composing module contexts
+- Higher-kinded types and type-level functions.
+- `Forall` polymorphism.
+- Trait-constrained `BoundedForall` polymorphism.
+- Records, tuples, variants, and recursive `Mu` types.
+- Trait dictionaries and constraint-based resolution.
+- Shared and mutable borrows.
+- Dereference, assignment, and move operations.
+- Region and lifetime checks.
+- Import, dependency, and rename helpers for module composition.
 
-The project is designed as a practical reference for compiler, DSL, and type-system work where explicit kinds, normalization, inference state, traits, and ownership-style checks need to coexist in one compact implementation.
+### Why it exists
+
+The project keeps the type-system machinery explicit. Kinds, type normalization, inference state, trait evidence, and ownership checks are visible in the API instead of being hidden behind a complete language frontend.
+
+This makes the library useful as a compact reference for compiler work, typed domain-specific languages, and experiments with type-system design.

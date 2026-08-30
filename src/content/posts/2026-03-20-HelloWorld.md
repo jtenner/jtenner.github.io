@@ -1,6 +1,6 @@
 ---
 title: "Hello, world"
-description: "A quick introduction to who I am, what I build, and what this blog is for."
+description: "A short introduction to what I build and what I write about on this site."
 pubDate: 2026-03-20
 author: "Joshua Tenner"
 authorEmail: "tenner.joshua@gmail.com"
@@ -11,32 +11,40 @@ image: ""
 
 # Hello, world
 
+> **Update — August 2026:** I revised this introduction because my current work is much more focused on compilers, runtimes, and WebAssembly.
+
 Hi, I’m Joshua Tenner.
 
-I’m a developer who loves building tools, and a lot of my work and curiosity centers on WebAssembly, compilers, validation, optimization, testing infrastructure, and developer tooling.
+I build compilers, WebAssembly runtimes, programming languages, testing tools, and other developer tools.
 
-That usually means I end up digging into representation details, runtime behavior, edge cases, architectural tradeoffs, and all the uncomfortable corners that show up when a project grows. This blog is where I work through how to build developer tools that can stand alongside large projects like Binaryen and other mature testing frameworks.
+A large part of my work is about WebAssembly, usually called Wasm. I care about the parts that become important when a tool must be correct, fast, and maintainable.
 
-Some of the areas I keep coming back to include:
+That includes:
 
-- WebAssembly encoders, decoders, validators, and optimizers
-- testing frameworks and fuzzing harnesses
-- compiler and IR design
-- AssemblyScript
-- MoonBit
-- functional programming
-- TypeScript
-- runtime boundaries between host systems and guest code
-- AI-assisted software development
-- project architecture and release workflows
+- WebAssembly validation and optimization;
+- compiler intermediate representations;
+- native code generation;
+- WebAssembly GC;
+- SIMD;
+- fuzzing and conformance testing;
+- runtime and host interfaces;
+- allocation and garbage-collection pressure;
+- reproducible builds and release workflows;
+- AI-assisted software development.
 
-Some posts here will probably be technical deep-dives on very specific topics. Some will be architecture notes and observations. Some will be design writeups for projects I’m actively developing. And some will just be me trying to explain a difficult idea clearly enough that I can trust my own understanding of it. I might even ask for help!
+Several projects on this site work at different layers of the same system.
+
+**Dewdrop** compiles the Dew programming language to WebAssembly GC. **Starshine** validates and optimizes WebAssembly modules. **Wago** compiles and runs WebAssembly as native code. **Facet** defines a system interface for modern Core WebAssembly. **stage_left** explores isolated actor-style processes. **as-harness** provides WebAssembly-based testing infrastructure for AssemblyScript.
+
+I use this blog as an engineering record. Some articles explain a design. Some document a problem and its solution. Others teach a technical idea that I needed to understand clearly myself.
+
+I try to keep the writing simple. Technical subjects already have enough complexity without adding unnecessary prose.
 
 ```ts
 console.log("Hello world!");
 ```
 
-So if you’re into compilers, WebAssembly, test infrastructure, developer tools, or the struggle of making systems work, you’ll probably find something interesting here.
+If you are interested in compilers, WebAssembly, runtimes, testing, or developer tools, you should find something useful here.
 
 Thanks for reading.
 
