@@ -1,0 +1,271 @@
+---
+import EditorialLayout from "../../layouts/EditorialLayout.astro";
+import type { JsonLdPayload } from "../../lib/structuredData";
+
+const site = Astro.site ?? Astro.url;
+const cardUrl = new URL("/card/", site).toString();
+
+const personSchema: JsonLdPayload = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Joshua Tenner",
+  url: cardUrl,
+  jobTitle: "Senior Full-Stack Software Developer",
+  sameAs: [
+    "https://github.com/jtenner/",
+    "https://www.linkedin.com/in/joshua-tenner-68316167/",
+  ],
+  knowsAbout: [
+    "C#",
+    ".NET",
+    "SQL Server",
+    "Full-stack development",
+    "Web development",
+    "Software architecture",
+    "WebAssembly",
+  ],
+};
+
+const focusAreas = [
+  {
+    label: "Applications",
+    title: "Full-stack development",
+    description:
+      "C#, .NET, ASP.NET, React, TypeScript, APIs, and modern web applications.",
+  },
+  {
+    label: "Data",
+    title: "SQL Server",
+    description:
+      "Stored procedures, query design, ETL, reporting, data integration, and performance work.",
+  },
+  {
+    label: "Engineering",
+    title: "Software architecture",
+    description:
+      "System design, testing, automation, maintainability, CI/CD, and production support.",
+  },
+  {
+    label: "Web",
+    title: "Web technologies",
+    description:
+      "Accessible interfaces, browser applications, service integration, and practical product delivery.",
+  },
+];
+
+const systemsWork = [
+  {
+    title: "Dewdrop",
+    role: "Programming language",
+    href: "/projects/dewdrop",
+  },
+  {
+    title: "Starshine",
+    role: "WebAssembly optimizer",
+    href: "/projects/starshine-mb",
+  },
+  {
+    title: "Wago",
+    role: "WebAssembly runtime",
+    href: "/projects/wago",
+  },
+  {
+    title: "Facet",
+    role: "System interface",
+    href: "/projects/facet",
+  },
+];
+---
+
+<EditorialLayout
+  title="Joshua Tenner | Senior Full-Stack Software Developer"
+  description="Joshua Tenner is a senior full-stack software developer focused on C#, .NET, SQL Server, web technologies, software architecture, and reliable production systems."
+  jsonLd={personSchema}
+  bodyClass="min-h-screen"
+>
+  <main id="main-content" class="relative min-h-screen overflow-hidden">
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 opacity-70"
+      style="background: radial-gradient(circle at 78% 8%, rgba(114,183,229,0.15), transparent 32%), radial-gradient(circle at 8% 72%, rgba(155,182,203,0.08), transparent 30%);"
+    ></div>
+
+    <div class="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
+      <header class="flex items-center justify-between gap-6">
+        <a
+          href="/card/"
+          class="flex h-10 w-10 items-center justify-center rounded-lg border border-outline-variant/50 bg-surface-container-low font-headline text-sm font-black tracking-tight text-on-surface transition-colors hover:border-primary/60 hover:text-primary"
+          aria-label="Joshua Tenner business card"
+        >
+          JT
+        </a>
+
+        <nav class="flex items-center gap-4 sm:gap-6" aria-label="Card links">
+          <a
+            href="/"
+            class="text-xs font-semibold text-on-surface-variant transition-colors hover:text-primary sm:text-sm"
+          >
+            Full site
+          </a>
+          <a
+            href="https://github.com/jtenner/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-xs font-semibold text-on-surface-variant transition-colors hover:text-primary sm:text-sm"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://www.linkedin.com/in/joshua-tenner-68316167/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-xs font-semibold text-on-surface-variant transition-colors hover:text-primary sm:text-sm"
+          >
+            LinkedIn
+          </a>
+        </nav>
+      </header>
+
+      <div class="flex flex-1 flex-col justify-center py-14 sm:py-20 lg:py-24">
+        <section class="grid grid-cols-1 items-end gap-10 lg:grid-cols-12 lg:gap-14" aria-labelledby="card-heading">
+          <div class="lg:col-span-8">
+            <p class="font-headline text-[11px] font-bold uppercase tracking-[0.22em] text-primary sm:text-xs">
+              Senior Full-Stack Software Developer
+            </p>
+
+            <h1
+              id="card-heading"
+              class="mt-4 max-w-5xl font-headline text-4xl font-black leading-[0.98] tracking-[-0.045em] text-on-surface sm:text-6xl lg:text-7xl"
+            >
+              I build production software from database to browser.
+            </h1>
+
+            <p class="mt-6 font-headline text-base font-semibold tracking-tight text-on-surface-variant sm:text-xl">
+              C# <span class="px-1 text-outline">·</span> .NET <span class="px-1 text-outline">·</span> SQL Server <span class="px-1 text-outline">·</span> Web Technologies
+            </p>
+
+            <p class="mt-6 max-w-3xl text-base leading-7 text-on-surface-variant sm:text-lg sm:leading-8">
+              I design and maintain business applications, databases, integrations, automation, and developer tools. I focus on reliable systems, clear code, and practical delivery.
+            </p>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a
+                href="https://www.linkedin.com/in/joshua-tenner-68316167/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex min-h-11 items-center justify-center rounded-lg bg-primary px-5 py-3 font-headline text-sm font-bold text-on-primary transition-opacity hover:opacity-90"
+              >
+                Contact me
+              </a>
+              <a
+                href="/projects"
+                class="inline-flex min-h-11 items-center justify-center rounded-lg border border-outline-variant/60 bg-surface-container-low px-5 py-3 font-headline text-sm font-bold text-on-surface transition-colors hover:border-primary/60 hover:text-primary"
+              >
+                View my work
+              </a>
+              <a
+                href="/"
+                class="inline-flex min-h-11 items-center justify-center px-3 py-3 font-headline text-sm font-bold text-on-surface-variant transition-colors hover:text-primary"
+              >
+                Read my writing
+              </a>
+            </div>
+          </div>
+
+          <aside class="lg:col-span-4" aria-label="Professional summary">
+            <div class="rounded-xl border border-outline-variant/45 bg-surface-container-low/90 p-6 sm:p-7">
+              <p class="font-headline text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
+                Joshua Tenner
+              </p>
+              <dl class="mt-6 space-y-5">
+                <div>
+                  <dt class="text-xs font-semibold text-outline">Experience</dt>
+                  <dd class="mt-1 font-headline text-lg font-bold text-on-surface">13+ years</dd>
+                  <dd class="mt-1 text-sm leading-6 text-on-surface-variant">Production software and business systems</dd>
+                </div>
+                <div class="border-t border-outline-variant/35 pt-5">
+                  <dt class="text-xs font-semibold text-outline">Core stack</dt>
+                  <dd class="mt-1 text-sm leading-6 text-on-surface-variant">C#, .NET, SQL Server, JavaScript, TypeScript, React</dd>
+                </div>
+                <div class="border-t border-outline-variant/35 pt-5">
+                  <dt class="text-xs font-semibold text-outline">Engineering depth</dt>
+                  <dd class="mt-1 text-sm leading-6 text-on-surface-variant">Architecture, performance, testing, compilers, and WebAssembly</dd>
+                </div>
+              </dl>
+            </div>
+          </aside>
+        </section>
+
+        <section class="mt-14 border-t border-outline-variant/35 pt-10 sm:mt-16 sm:pt-12" aria-labelledby="focus-heading">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p class="font-headline text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
+                What I do
+              </p>
+              <h2 id="focus-heading" class="mt-2 font-headline text-2xl font-black tracking-tight text-on-surface sm:text-3xl">
+                Practical software engineering
+              </h2>
+            </div>
+            <p class="max-w-xl text-sm leading-6 text-on-surface-variant">
+              My systems work is additional technical depth. My primary work is building and maintaining production applications.
+            </p>
+          </div>
+
+          <div class="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {
+              focusAreas.map((area) => (
+                <article class="rounded-lg border border-outline-variant/40 bg-surface-container-low p-5">
+                  <p class="font-headline text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+                    {area.label}
+                  </p>
+                  <h3 class="mt-2 font-headline text-lg font-black text-on-surface">
+                    {area.title}
+                  </h3>
+                  <p class="mt-3 text-sm leading-6 text-on-surface-variant">
+                    {area.description}
+                  </p>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+
+        <section class="mt-10 sm:mt-12" aria-labelledby="depth-heading">
+          <div class="rounded-xl border border-outline-variant/35 bg-surface-container-lowest/45 p-5 sm:p-7">
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p class="font-headline text-[10px] font-bold uppercase tracking-[0.2em] text-outline">
+                  Technical depth
+                </p>
+                <h2 id="depth-heading" class="mt-1 font-headline text-lg font-black text-on-surface sm:text-xl">
+                  I also build compilers, runtimes, and language tools.
+                </h2>
+              </div>
+              <a href="/projects" class="text-sm font-semibold text-primary hover:underline">All projects</a>
+            </div>
+
+            <div class="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
+              {
+                systemsWork.map((project) => (
+                  <a href={project.href} class="group min-w-0">
+                    <span class="block font-headline text-sm font-bold text-on-surface transition-colors group-hover:text-primary">
+                      {project.title}
+                    </span>
+                    <span class="mt-1 block text-xs leading-5 text-outline">
+                      {project.role}
+                    </span>
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="flex flex-col gap-2 border-t border-outline-variant/30 pt-5 text-xs text-outline sm:flex-row sm:items-center sm:justify-between">
+        <p>Joshua Tenner · Senior Full-Stack Software Developer</p>
+        <p>C# · .NET · SQL Server · Web Technologies</p>
+      </footer>
+    </div>
+  </main>
+</EditorialLayout>
