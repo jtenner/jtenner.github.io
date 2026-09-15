@@ -36,18 +36,19 @@ export const watLanguage = {
       match: "\\b(?:nan(?::0x[0-9A-Fa-f_]+)?|inf)\\b",
     },
     {
+      name: "support.function.instruction.wat",
+      match:
+        "\\b(?:[A-Za-z][A-Za-z0-9_]*\\.[A-Za-z0-9_./]+|drop|select)\\b",
+    },
+    {
       name: "keyword.control.wat",
       match:
-        "\\b(?:block|loop|if|then|else|end|br|br_if|br_table|return|call|call_indirect|try|catch|catch_all|throw|rethrow|delegate|unreachable|nop)\\b",
+        "\\b(?:block|loop|if|then|else|end|br|br_if|br_table|return|return_call|return_call_indirect|call|call_indirect|try|catch|catch_all|throw|rethrow|delegate|unreachable|nop)\\b",
     },
     {
       name: "keyword.declaration.wat",
       match:
         "\\b(?:module|func|type|param|result|local|global|memory|table|elem|data|import|export|start|mut|offset|item|declare|tag)\\b",
-    },
-    {
-      name: "support.function.instruction.wat",
-      match: "\\b[A-Za-z][A-Za-z0-9_]*\\.[A-Za-z0-9_./]+\\b",
     },
     {
       name: "storage.type.wat",
