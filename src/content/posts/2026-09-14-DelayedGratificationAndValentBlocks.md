@@ -186,7 +186,7 @@ The important part is not only that this code is shorter. By waiting, the compil
 
 This is the main technique used by my latest project called Wago, which is a single-forward-pass WebAssembly-to-native JIT compiler written in Go. You can check it out here:
 
-[wago-org/wago on GitHub](https://github.com/wago-org/wago)
+::github[wago-org/wago]
 
 Wago compiles Wasm directly to machine code without using a whole-function intermediate representation, while using very little memory at compile time. You can check out some of our computed benchmark numbers and install it here at [the Wago homepage](https://wago.sh/).
 
