@@ -26,6 +26,8 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Build site
         run: bun run build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Validate RSS output
         run: bun run check:rss
       - name: Upload Pages artifact
