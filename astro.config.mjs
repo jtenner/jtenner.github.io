@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
+import { remarkGithubCard } from './src/lib/remarkGithubCard.mjs';
 import { watLanguage } from './src/lib/watLanguage.mjs';
 
 export default defineConfig({
@@ -13,6 +14,7 @@ export default defineConfig({
     tailwind()
   ],
   markdown: {
+    remarkPlugins: [remarkGithubCard],
     shikiConfig: {
       langs: [watLanguage],
       langAlias: {
