@@ -79,9 +79,9 @@ pop  rax
 ret
 ```
 
-Each instruction immediately commits to a physical representation for its result. In doing so, the compiler throws away useful information after almost every instruction.
+Each instruction immediately commits its result to a physical machine representation. This causes the compiler to discard useful information before later instructions can take advantage of it.
 
-Additionally, the compiler threw away useful information after each and every instruction. It results in:
+In this example, directly mirroring the WebAssembly operand stack with machine-stack operations results in:
 
 - 5 pushes
 - 5 pops
@@ -90,7 +90,7 @@ Additionally, the compiler threw away useful information after each and every in
 - 1 add
 - 1 multiply
 
-Instead, what if we stopped mirroring the WebAssembly operand stack into actual machine-stack operations? We can keep a "symbolic" stack during compilation and delay the machine-code decisions until we have more information.
+Instead, what if we stopped mirroring the WebAssembly operand stack with real machine-stack operations? We could keep a "symbolic" stack during compilation and delay machine-code decisions until we have enough information to make better choices.
 
 ### Step 1: `local.get $a`
 
