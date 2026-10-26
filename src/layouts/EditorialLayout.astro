@@ -8,7 +8,7 @@ const {
   description = "Compiler and runtime engineering notes about WebAssembly, programming languages, optimization, fuzzing, and developer tools.",
   bodyClass = "",
   jsonLd,
-  image = "/images/hero-home.png",
+  image = "/images/og-card.png",
   noindex = false,
   openGraphType = "website",
 } = Astro.props as {
@@ -59,10 +59,14 @@ const robots = noindex ? "noindex, nofollow" : "index, follow";
     <meta content={description} property="og:description" />
     <meta content={canonicalUrl} property="og:url" />
     <meta content={socialImageUrl} property="og:image" />
+    <meta content="1200" property="og:image:width" />
+    <meta content="630" property="og:image:height" />
+    <meta content="Assembling Me, a blog by Joshua Tenner about compilers and WebAssembly" property="og:image:alt" />
     <meta content="summary_large_image" name="twitter:card" />
     <meta content={title} name="twitter:title" />
     <meta content={description} name="twitter:description" />
     <meta content={socialImageUrl} name="twitter:image" />
+    <meta content="Assembling Me, a blog by Joshua Tenner about compilers and WebAssembly" name="twitter:image:alt" />
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
