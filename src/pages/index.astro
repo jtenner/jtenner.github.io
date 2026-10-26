@@ -4,7 +4,6 @@ import { getCollection } from "astro:content";
 import FeaturedProjects from "../components/FeaturedProjects.astro";
 import NavHeader from "../components/NavHeader.astro";
 import Footer from "../components/Footer.astro";
-import StarField from "../components/StarField.astro";
 import AuthorBio from "../components/AuthorBio.astro";
 import PostCard from "../components/PostCard.astro";
 import {
@@ -90,8 +89,12 @@ const jsonLd = [
   <NavHeader activePage="blog" />
 
   <main role="main" class="pt-14 sm:pt-16" id="main-content">
-    <section class="relative w-full" style="background: radial-gradient(ellipse at 50% 0%, rgba(114,183,229,0.10) 0%, transparent 62%);">
-      <StarField height="460px" parallax={true} />
+    <section class="relative w-full min-h-[460px]" style="background: radial-gradient(ellipse at 50% 0%, rgba(114,183,229,0.10) 0%, transparent 62%);">
+      <div
+        aria-hidden="true"
+        class="absolute inset-0"
+        style="background-image: linear-gradient(to right, rgba(114,183,229,0.055) 1px, transparent 1px), linear-gradient(to bottom, rgba(114,183,229,0.055) 1px, transparent 1px); background-size: 44px 44px; -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 38%, black 25%, transparent 78%); mask-image: radial-gradient(ellipse 90% 80% at 50% 38%, black 25%, transparent 78%);"
+      ></div>
       <div
         class="absolute inset-0 flex flex-col items-center justify-center text-center px-5 sm:px-6"
         style="background: linear-gradient(to bottom, transparent 26%, #151b26 96%);"
