@@ -1,6 +1,6 @@
 ---
 title: "Think You Can RTX Him?"
-description: "The whole project in one post. A ray tracer running as WebAssembly under Wago, with Vulkan on an RTX 4060, and a fuzzy mascot I pushed until the Blender render matched the photo."
+description: "Building a WebAssembly ray tracer with Wago, Vulkan, and an RTX 4060 turned into something unexpected: teaching a fleet of AI agents to recreate a fuzzy mascot in Blender."
 pubDate: '2026-10-27'
 author: "Joshua Tenner"
 authorEmail: "tenner.joshua@gmail.com"
@@ -23,18 +23,18 @@ I also have [Wago](https://wago.sh/), my WebAssembly runtime, and a Vulkan impor
 So I picked the ray tracer.
 I picked the hard route on purpose.
 
-As it turns out, Muse is pretty good at orchestrating agents at a top level, so maybe it wasn't so bad.
+As it turns out, Muse is pretty good at orchestrating agents. Maybe the hard route wouldn't be so bad after all.
 
 ## The stack
 
-The ray tracer would run as a WebAssembly guest under Wago.
+The plan was to run the ray tracer as a WebAssembly guest under Wago.
 The language? Rust. Apparently Muse wanted to use it and I wasn't going to complain.
 
-Vulkan (and Metal) would put the pixels on screen. It turned out to be a really solid choice because the render came out good!
+Vulkan (and Metal) would handle the graphics output. Everything sounded great on paper. Surely the first render would look fantastic.
 
 ![An early frame. Acid green checkerboard, a mint sky, a traffic cone red sphere, and a glass sphere that came out half and half.](/images/posts/first-bad-frame.png)
 
-Oh. Maybe not. It took quite a few iterations to really get things moving and it made a lot of progress.
+Oh. Maybe not. It took quite a few iterations before the scene started looking like the postcard I had imagined.
 
 ## The code
 
@@ -97,7 +97,9 @@ The output has to be a real render, saved as an image file.
 No fake screenshots.
 Ever.
 
-Then I sent in a photo.
+With the postcard scene underway, I decided to push the project in another direction. Instead of starting with another collection of spheres, I wanted to see how close the agents could get to a real reference image.
+
+So I sent Muse a photo.
 
 ![The reference photo. A small furry creature in a hooded suit, holding a glowing orb.](/images/posts/reference-muse-mascot.jpg)
 
@@ -118,18 +120,15 @@ Look at him the way a ray tracer looks at him.
 - The orb is a glass sphere with a bright core inside it.
 
 That last one is the showpiece.
-In a ray tracer, a glowing orb means refraction.
-It means emission.
-It means colored light spilling onto the fur and the hands.
-The fur was the one cheat.
-Real fuzz is expensive.
-The plan was soft matte shading and a gentle rim light, and call it close enough at postcard size.
+The orb needed transparent glass, refraction, and an emissive core. The real challenge was making that glow illuminate the fur and hands without looking like someone had glued a flashlight inside a marble.
+The fur was supposed to be the one cheat. Real fuzz is expensive. The original plan was to use soft matte shading and a gentle rim light, then call it close enough at postcard size.
+
+That plan did not survive very long.
 
 The plan for the model was Blender.
-I told the fleet to have GPT load up Blender on the laptop.
-Blender was installed.
-There is also an MCP for it.
-With that, my agents got to work. 
+Blender was already installed on my laptop, and I had an MCP integration that let the agents control it. I asked the fleet to put GPT to work building the mascot.
+
+Then I let them loose.
 
 ## GPT built him in about eight minutes
 
@@ -194,7 +193,7 @@ My request was simple.
 
 And boy did Muse have fun. 
 
-The photo stopped being inspiration, and it gave Sol something to iterate towards. 
+The photo stopped being a loose reference. It became a measurable target, and Sol had something concrete to optimize against.
 
 Render.
 Write down every visible difference from the photo.
@@ -224,7 +223,7 @@ Slimmer arms.
 Capsule feet.
 A volume core in the orb, so the glow lives inside the glass instead of sitting on it.
 
-The render takes about 19 seconds on the RTX 4060.
+At this stage, the Blender render took about 19 seconds on my laptop's RTX 4060.
 Here is how close the measurements landed.
 
 | Measure | Photo | Render |
@@ -245,7 +244,7 @@ It was by no means accurate or perfect.
 
 - The fur reads finer and softer than the photo. His pile is longer and looks combed. Closing that gap likely takes 250,000 to 400,000 strands, or a proper groom. Both were past the cap I set for this pass.
 - The orb has the right colors in the right places, but it is less luminous than the photo. Its wisps still read a bit wire like.
-- The legs join the body about 5 cm narrower than in the photo.
+- The legs join the body too narrowly, by about 5 cm at the model's scale.
 - The eyes and the smile sit roughly 4 pixels low.
 
 I could grit my teeth and keep iterating until it was perfect. 
@@ -263,14 +262,13 @@ The hands stopped looking like separate blobs and became paws.
 The arms were the last holdout.
 They went in as segments, and the joins showed.
 The final pass rebuilt each arm as one continuous tube, shoulder to paw, and measured the surface all the way down it.
-He stands at 299,800 strands now.
-Same height as the photo, within a rounding error.
+The final model has 299,800 fur strands. Its height within the frame now matches the reference photo within rounding error.
 That is where I called it.
 Three items from the differs list still stand.
 The orb still glows less than the photo, and its wisps still read a bit wire like.
 The legs still join the body a touch narrow.
 The eyes and the smile still sit a few pixels low.
-The fur got closer, softer and less combed, but his pile is longer than the render at any strand count I tried.
+The fur got closer. It was softer, less combed, and much more natural, but the strand length still didn't quite match the reference.
 Good enough is a decision, not a surrender.
 
 ![The final render. One-piece tube arms, 299,800 strands, the orb glowing from inside the glass.](/images/posts/mascot-render-final.png)
@@ -279,13 +277,19 @@ Good enough is a decision, not a surrender.
 
 ## Where the project stands
 
-The Blender model is done, and that part of the project is finished.
-The model, the script, the taste fixes, and the fur pass are all in the repo, measured against the photo, with the residue listed above.
+The Blender model is finished.
 
-The ray tracer itself is not done, and this post is not its result.
-The Rust guest for milestone one exists, and the mascot is scene two, authored and ready.
-He has not been rendered by the WebAssembly guest yet.
-The one wrinkle is that the build container cannot see the RTX card, so real tests run on the laptop itself.
+The build script, model, scene description, and all the iterations are in the repository. The final version has 299,800 fur strands, continuous arms, a volumetric orb, and proportions that are remarkably close to the reference photo.
+
+The WebAssembly ray tracer, however, is still a work in progress.
+
+The Rust guest for the original postcard scene exists, but the mascot has not been rendered through Wago yet. The build container also cannot access my RTX 4060, so GPU testing has to happen directly on the laptop.
+
+That is an important distinction. The Blender reconstruction demonstrates what the agents managed to build and refine. It does not prove that the WebAssembly renderer can produce the same result.
+
+Not yet, anyway.
+
+And that is probably where the next adventure begins.
 
 Go check it out! [The project is on GitHub.](https://github.com/jtenner/wago-raytracer)
 
