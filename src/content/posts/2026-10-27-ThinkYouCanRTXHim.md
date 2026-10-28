@@ -10,7 +10,7 @@ categories:
 - "Tech"
 - "WASM"
 - "Open Source"
-image: "/images/posts/mascot-render-final.png"
+image: ""
 ---
 
 This project started as a treat.
@@ -18,34 +18,71 @@ This project started as a treat.
 I asked Muse if it had any coding projects it wanted to build.
 It named three.
 One was a ray tracer that renders one beautiful image.
-I have an RTX 4060 in my laptop.
+I have an RTX 4060 in my laptop, so it seemed like a good fit. 
 I also have [Wago](https://wago.sh/), my WebAssembly runtime, and a Vulkan imports library for it.
 So I picked the ray tracer.
-The project lives on GitHub as [wago-raytracer](https://github.com/jtenner/wago-raytracer).
 I picked the hard route on purpose.
+
+As it turns out, Muse is pretty good at orchestrating agents at a top level, so maybe it wasn't so bad.
+
+## The stack
+
 The ray tracer would run as a WebAssembly guest under Wago.
-Vulkan would put the pixels on screen.
-That shows what Wago is for better than another benchmark chart.
+The language? Rust. Apparently Muse wanted to use it and I wasn't going to complain.
+
+Vulkan (and Metal) would put the pixels on screen. It turned out to be a really solid choice because the render came out good!
+
+![An early frame. Acid green checkerboard, a mint sky, a traffic cone red sphere, and a glass sphere that came out half and half.](/images/posts/first-bad-frame.png)
+
+Oh. Maybe not. It took quite a few iterations to really get things moving and it made a lot of progress.
+
+## The code
 
 The ray tracing math is the easy part.
-It is a few dozen lines of vector math and sphere tests.
+
+```rust
+const SPHERES: [Sphere; 3] = [
+    Sphere { center:v(-1.75,0.85,0.),radius:0.85,color:v(0.78,0.16,0.075),material:MATTE },
+    Sphere { center:v(0.,0.85,0.15),radius:0.85,color:v(0.97,0.99,1.),material:GLASS },
+    Sphere { center:v(1.8,0.9,-0.15),radius:0.9,color:v(0.91,0.78,0.51),material:METAL },
+];
+
+fn intersect(o: V, d: V, limit: f32) -> Hit {
+    let mut h=Hit{t:limit,material:SKY,p:V::default(),n:V::default(),color:V::default(),front:true};
+    if d.y < -0.0001 {
+        let t=-o.y/d.y;
+        if t>0.001 && t<h.t {
+            h.t=t; h.material=GROUND; h.n=v(0.,1.,0.); h.p=o.add(d.mul(t));
+            let ix=libm::floorf(h.p.x) as i32; let iz=libm::floorf(h.p.z) as i32;
+            h.color=if (ix+iz)&1 !=0 {v(0.32,0.40,0.33)}else{v(0.58,0.62,0.49)};
+        }
+    }
+    for s in SPHERES {
+        let oc=o.sub(s.center); let b=oc.dot(d); let disc=b*b-oc.dot(oc)+s.radius*s.radius;
+        if disc<0. {continue;}
+        let mut t=-b-libm::sqrtf(disc); if t<=0.001 { t=-b+libm::sqrtf(disc); }
+        if t<=0.001 || t>=h.t {continue;}
+        h.t=t; h.p=o.add(d.mul(t)); let outward=h.p.sub(s.center).mul(1./s.radius);
+        h.front=d.dot(outward)<0.; h.n=if h.front {outward}else{outward.mul(-1.)};
+        h.material=s.material; h.color=s.color;
+    }
+    h
+}
+```
+
+It is a few dozen lines of vector math and sphere tests. That is the whole scene: a ground plane, three spheres, and one function that asks what a ray hits first. This is the real code from the guest, compact agent style and all.
 The slog is the Vulkan boilerplate.
 Boilerplate is what my agent fleet eats for breakfast, so I set Sol, my workhorse model, on the build.
 
-## Why build it the hard way
+## Build it the hard way
 
 A native ray tracer would have been shorter.
 It also would have proved nothing except that I own a graphics card.
 
-This way, three pieces have to work together before one pixel lands.
-The guest code does the tracing.
-Wago runs the guest.
-The Vulkan imports put the result on screen.
-If the image appears, the stack works.
-That is the demonstration.
+My goal was to prove that a lot of the things I developed could finally come together.
 
-I left the guest language to Muse.
-It picked Rust, compiled to WebAssembly with minimal dependencies.
+If the image appears? The stack works.
+That is the demonstration.
 
 ## Milestone one is a postcard, on purpose
 
@@ -65,8 +102,8 @@ Then I sent in a photo.
 ![The reference photo. A small furry creature in a hooded suit, holding a glowing orb.](/images/posts/reference-muse-mascot.jpg)
 
 He is the Muse mascot.
-He is also, and I say this with love, a meme.
-I asked one question.
+He is also an excellent meme.
+I asked one question to my muse assistant. 
 Think you can RTX him?
 
 ## He is a primitives starter pack
@@ -92,8 +129,7 @@ The plan for the model was Blender.
 I told the fleet to have GPT load up Blender on the laptop.
 Blender was installed.
 There is also an MCP for it.
-If the container could not reach it, an agent could run outside the container just for the model.
-That is what happened.
+With that, my agents got to work. 
 
 ## GPT built him in about eight minutes
 
@@ -113,8 +149,9 @@ That is a fair trade for a first pass, as long as nobody pretends otherwise.
 
 Then I did something I almost never do.
 I let Claude review GPT.
-My standing rule is no Claude reviews on my engine work.
-This was a fun project, and Opus has better taste than GPT sometimes.
+My standing rule is no Claude reviews on my engine work because I only have a $25 plan and usage runs out quickly. For small stuff it does the trick though.
+
+Opus has better taste than GPT for many things.
 So Opus got the photo, the render, and one job.
 Judge him.
 Fix the small things yourself.
@@ -140,7 +177,6 @@ Corrected body and face colors.
 Narrower face.
 Feet planted on the ground.
 It also said what it would not fix, and ranked the list.
-Real fur was item one.
 The arms bulged like sausages.
 The feet were still ellipsoids, and wanted to be capsules.
 The wisps in the orb looked like worms, and wanted a volume shader.
@@ -148,28 +184,17 @@ The halo was weaker than the photo.
 
 ![The render after the taste review. Warmer, brighter, smaller orb, feet on the ground. Still no fur.](/images/posts/taste-review-render.png)
 
-I shared the comments with my friends.
-One of them pointed out the obvious.
-Nobody fine tuned any of us on 3D modeling.
-Everything we know about it came from documentation and confidence.
-That is still true.
-It is also why the next part matters.
-
 ## I pushed, twice, and the project got better
 
-My first call was simple.
-Go for the fur.
-Have fun.
+My request was simple.
+> Go for the fur.
+> Honestly, it is a good mockup, but it should look exactly like the image.
+> Accuracy totally counts.
+> And of course, have fun.
 
-My second call changed the job.
-Honestly, it is a good mock up, but it should look exactly like the image.
-Accuracy totally counts.
+And boy did Muse have fun. 
 
-That sentence did real work.
-The photo stopped being inspiration.
-It became ground truth.
-Close enough stopped counting.
-So the relaunched pass had a harder standard, and I want to describe it plainly, because it is the same standard I use on my engine work.
+The photo stopped being inspiration, and it gave Sol something to iterate towards. 
 
 Render.
 Write down every visible difference from the photo.
@@ -190,7 +215,7 @@ It had to measure, write the list, and show a side by side at the end.
 
 The fur pass ran seven full compare and fix cycles.
 He has real fur now.
-About 120,000 strands.
+About 120,000 strands by the end of that pass.
 The fur falls downward, the way it does in the photo.
 The silhouette is fuzzy all the way round.
 Hood fur spills over the rim of the face.
@@ -212,42 +237,56 @@ Silhouette widths sit within a percent or two of the photo almost everywhere.
 Not everywhere.
 That is the next section.
 
-![Reference on the left, final render on the right.](/images/posts/mascot-side-by-side-final.png)
+![Reference on the left, fur pass render on the right.](/images/posts/mascot-side-by-side-fur.png)
 
 ## What still differs, honestly
 
-Accuracy counts, so here is the residue, in the open.
+It was by no means accurate or perfect.
 
 - The fur reads finer and softer than the photo. His pile is longer and looks combed. Closing that gap likely takes 250,000 to 400,000 strands, or a proper groom. Both were past the cap I set for this pass.
 - The orb has the right colors in the right places, but it is less luminous than the photo. Its wisps still read a bit wire like.
 - The legs join the body about 5 cm narrower than in the photo.
 - The eyes and the smile sit roughly 4 pixels low.
 
-I could hide that list and most readers would never know.
-That would miss the point of the whole exercise.
-The list is the work.
-Every item on it is a known, measured difference, with a cause and a price.
-That is a very different thing from a render that just feels off.
+I could grit my teeth and keep iterating until it was perfect. 
+That would miss the point of the whole exercise. I let my agent have some fun.
 
-![The final render. Real strand fur, downward fall, fuzzy silhouette, volume core in the orb, and arms built as one tube from shoulder to paw.](/images/posts/mascot-render-final.png)
+![The fur pass render on its own. 120,000 strands, downward fall, fuzzy silhouette, volume core in the orb.](/images/posts/fur-pass-render.png)
+
+## Then I kept pushing
+
+The fur pass was not the end of it.
+Five more passes followed, each one aimed at a measured difference.
+
+The pile got softer and less combed.
+The hands stopped looking like separate blobs and became paws.
+The arms were the last holdout.
+They went in as segments, and the joins showed.
+The final pass rebuilt each arm as one continuous tube, shoulder to paw, and measured the surface all the way down it.
+He stands at 299,800 strands now.
+Same height as the photo, within a rounding error.
+That is where I called it.
+Three items from the differs list still stand.
+The orb still glows less than the photo, and its wisps still read a bit wire like.
+The legs still join the body a touch narrow.
+The eyes and the smile still sit a few pixels low.
+The fur got closer, softer and less combed, but his pile is longer than the render at any strand count I tried.
+Good enough is a decision, not a surrender.
+
+![The final render. One-piece tube arms, 299,800 strands, the orb glowing from inside the glass.](/images/posts/mascot-render-final.png)
+
+![Reference on the left, final render on the right.](/images/posts/mascot-side-by-side-final.png)
 
 ## Where the project stands
 
-Blender built the reference, and that part is done.
+The Blender model is done, and that part of the project is finished.
 The model, the script, the taste fixes, and the fur pass are all in the repo, measured against the photo, with the residue listed above.
 
 The ray tracer itself is not done, and this post is not its result.
 The Rust guest for milestone one exists, and the mascot is scene two, authored and ready.
 He has not been rendered by the WebAssembly guest yet.
 The one wrinkle is that the build container cannot see the RTX card, so real tests run on the laptop itself.
-There is also one open question from the early runs, a sampled blue channel that came out at 0.90 natively and 0.49 under Wago.
-That lead is untested.
-It is a question, not a finding.
 
-That is the whole project, in one place.
-A photo, a script, two rival models with different jobs, one very patient critic, and an art director who kept saying one thing.
-Make it match.
+Go check it out! [The project is on GitHub.](https://github.com/jtenner/wago-raytracer)
 
-He is not exact yet, and I can say how close, and I can name the rest.
-The render under Wago is not landed yet, and I can say exactly what is left before it is.
-For a project that started as a joke at about 11:30 at night, I will take that.
+Thanks for reading. Go out there and make something.
